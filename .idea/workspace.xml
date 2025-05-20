@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="887f9fcf-8a44-4225-ab9d-384a1b800ed8" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nl2sql_test/simple_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/nl2sql_test/simple_test.py" afterDir="false" />
-    </list>
+    <list default="true" id="887f9fcf-8a44-4225-ab9d-384a1b800ed8" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,7 +44,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1747719679332</updated>
-      <workItem from="1747719681300" duration="3113000" />
+      <workItem from="1747719681300" duration="3801000" />
     </task>
     <servers />
   </component>
