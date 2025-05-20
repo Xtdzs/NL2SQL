@@ -50,7 +50,7 @@ python main.py \
 
 **Tips:**
 
-- **About the API service:** If you feel confused on how to set the IP address of your service or some other problems, you could find help by reading the official documents of [FastAPI](https://fastapi.tiangolo.com/). Feel free to ask me if you have any other questions. (committing it as an `issue` is recommended)
+- **About the API service:** If you feel confused on how to set the IP address of your service or some other problems, you could find help by reading the official documents of [FastAPI](https://fastapi.tiangolo.com/). Feel free to contact me if you have any other questions. (committing it as an `issue` is recommended)
 - **About the choice of the model:** 
   - Common Model: recommend LLMs with the size **between 7B to 14B**, considering to trade off between the NLU ability and the Latency.
   - SQL Model: recommend **sqlcoder** series LLMs. These models could do a great job in conversing basic NL to SQL. 
