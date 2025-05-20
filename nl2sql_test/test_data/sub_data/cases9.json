@@ -1,0 +1,70 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和邮箱地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和其对应的处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的总数量和平均单价",
+        "sql": "SELECT Orders.order_id, SUM(OrderItems.quantity) AS total_quantity, AVG(OrderItems.unit_price) AS average_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Orders.order_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "Orders"
+        ],
+        "nl": "查询销售额最高的供应商，并列出其产品的名称和总销售额",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Suppliers.supplier_name HAVING SUM(OrderItems.unit_price * OrderItems.quantity) IN (SELECT MAX(total_sales) FROM (SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Suppliers.supplier_name) AS sales_summary)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的平均单价，并与上一个订单的平均单价进行比较",
+        "sql": "SELECT Orders.order_id, AVG(OrderItems.unit_price) AS average_price, LAG(AVG(OrderItems.unit_price)) OVER (ORDER BY Orders.order_date) AS previous_average_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Orders.order_id"
+    }
+]

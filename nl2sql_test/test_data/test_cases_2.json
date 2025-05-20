@@ -1,0 +1,1893 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一个新的客户信息：姓名为张三，邮箱地址为zhangsan@example.com，联系电话为1234567890",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number) VALUES ('张三', 'zhangsan@example.com', '1234567890')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品型号为‘Laptop A’插入到供应商ID为1的供应列表中，供货价格为500美元",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price) SELECT product_id, 1, 500 FROM Products WHERE product_name = 'Laptop A'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "修改订单ID为1001的商品‘Laptop B’的数量从2个增加到3个",
+        "sql": "UPDATE OrderItems SET quantity = 3 WHERE order_id = 1001 AND product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop B')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Suppliers"
+        ],
+        "nl": "插入一个新的产品信息：型号为‘Desktop X’，分类为‘工作站’，配置为Intel Core i9处理器，16GB RAM，512GB SSD存储，并关联供应商ID为2，供货价格为800美元。",
+        "sql": "INSERT INTO Products (product_name, product_category) VALUES ('Desktop X', '工作站'); \n INSERT INTO ProductSpecifications (product_id, processor_model, ram_capacity_in_gb, storage_type, storage_capacity_in_gb) SELECT LAST_INSERT_ID(), 'Intel Core i9', 16, 'SSD', 512 FROM Products WHERE product_name = 'Desktop X';\n INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price) SELECT LAST_INSERT_ID(), 2, 800 FROM Products WHERE product_name = 'Desktop X'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers",
+            "Products"
+        ],
+        "nl": "查询每个客户的订单总数和平均购买金额，并按订单总数排序。",
+        "sql": "SELECT Customers.customer_full_name, COUNT(DISTINCT Orders.order_id) AS order_count, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_purchase_amount FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name ORDER BY order_count DESC"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一个新的客户信息",
+        "sql": "INSERT INTO Customers (customer_id, customer_full_name, customer_email_address, customer_contact_number, customer_shipping_address, customer_registered_date) VALUES (101, '张三', 'zhangsan@example.com', '1234567890', '北京市海淀区', '2023-03-15')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "为产品'笔记本电脑'添加供应商信息，并设定供应价格和供货周期",
+        "sql": "INSERT INTO Products (product_id, product_name, product_category, product_description, product_launch_date, warranty_period_in_months, product_sku_code, product_status) VALUES (102, '笔记本电脑', '笔记本', '高性能笔记本电脑', '2023-03-01', 12, 'NB-123', '在售')\nINSERT INTO Suppliers (supplier_id, supplier_name, supplier_contact_email, supplier_contact_number, supplier_country) VALUES (103, '供应商A', 'a@example.com', '9876543210', '中国')\nINSERT INTO ProductSupplierMapping (mapping_id, product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (101, 102, 103, 5000.00, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为客户'李四'创建一个订单，包含两台笔记本电脑",
+        "sql": "INSERT INTO Orders (order_id, customer_id, order_date, order_total_amount, order_status, shipping_tracking_number, estimated_delivery_date) VALUES (104, 102, '2023-03-16', 10000.00, '已支付', 'TRK-12345', '2023-03-23')\nINSERT INTO OrderItems (order_item_id, order_id, product_id, quantity, unit_price, discount_percentage) VALUES (105, 104, 102, 2, 5000.00, 0.00)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "更新产品'笔记本电脑'的处理器型号为'英特尔酷睿i9'，并且屏幕尺寸由15英寸改为16英寸",
+        "sql": "UPDATE Products SET product_description = '高性能笔记本电脑, 英特尔酷睿i9 处理器' WHERE product_id = 102\nUPDATE ProductSpecifications SET processor_model = '英特尔酷睿i9' WHERE product_id = 102\nUPDATE ProductSpecifications SET screen_size_in_inches = 16.0 WHERE product_id = 102"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "删除所有关于产品'笔记本电脑'的售后服务申请记录",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE product_id = 102"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "添加一个新客户: 姓名为张三，邮箱地址为 zhangsan@example.com，联系电话为 1234567890，注册日期为 2023-10-26",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number, customer_registered_date) VALUES ('张三', 'zhangsan@example.com', '1234567890', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "为产品id为 1 的产品添加供应商，供应商id为 2，供货价格为 500.00，供货周期为 7 天",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (1, 2, 500.00, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "创建一个订单，客户id为 1，订单日期为 2023-10-27，总金额为 1000.00，添加一个商品，产品id为 2，数量为 2，单价为 250.00",
+        "sql": "INSERT INTO Orders (customer_id, order_date, order_total_amount) VALUES (1, '2023-10-27', 1000.00);\nINSERT INTO OrderItems (order_id, product_id, quantity, unit_price) VALUES ((SELECT MAX(order_id) FROM Orders), 2, 2, 250.00)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "将产品id为 1 的产品的处理器型号更新为 Intel Core i7-13700H，并更新屏幕大小为 15.6 英寸",
+        "sql": "UPDATE Products SET product_description = 'Updated Product Description' WHERE product_id = 1;\nUPDATE ProductSpecifications SET processor_model = 'Intel Core i7-13700H', screen_size_in_inches = 15.6 WHERE product_id = 1"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "删除所有关于产品id为 3 的售后服务申请记录，并删除关联的订单记录。",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE product_id = 3;\nDELETE FROM Orders WHERE order_id IN (SELECT order_id FROM OrderItems WHERE product_id = 3)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一个新的客户信息：姓名为 John Doe，邮箱地址为 john.doe@example.com，电话号码为 123-456-7890",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number) VALUES ('John Doe', 'john.doe@example.com', '123-456-7890')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "为产品型号为 'Laptop X' 的供应商添加信息，供应商名为 'Tech Solutions'，供货价格为 1000.00 美元，供货周期为 7 天",
+        "sql": "INSERT INTO Products (product_name, product_category, product_description, product_launch_date, warranty_period_in_months, product_sku_code, product_status) VALUES ('Laptop X', 'Laptop', 'High-performance laptop', '2023-10-26', 12, 'LAPTOPX001', 'Available');\nINSERT INTO Suppliers (supplier_name, supplier_contact_email, supplier_contact_number, supplier_country) VALUES ('Tech Solutions', 'techsolutions@example.com', '555-123-4567', 'USA');\nINSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES ((SELECT product_id FROM Products WHERE product_name = 'Laptop X'), (SELECT supplier_id FROM Suppliers WHERE supplier_name = 'Tech Solutions'), 1000.00, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为一个订单添加商品信息，订单号为 12345，购买了 'Laptop X' 产品，数量为 2 件，单价为 1000.00 美元，没有折扣",
+        "sql": "INSERT INTO Orders (customer_id, order_date, order_total_amount, order_status, shipping_tracking_number, estimated_delivery_date) VALUES ((SELECT customer_id FROM Customers WHERE customer_full_name = 'John Doe'), '2023-10-27', 2000.00, 'Processing', 'ORD-12345-ABC', '2023-11-05');\nINSERT INTO OrderItems (order_id, product_id, quantity, unit_price, discount_percentage) VALUES (LAST_INSERT_ID(), (SELECT product_id FROM Products WHERE product_name = 'Laptop X'), 2, 1000.00, 0)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "aggregate"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "根据每个客户的总订单金额，将客户排序并显示前三个最大的消费者的姓名和总消费金额。同时，为每一个新客户插入一条记录",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number) VALUES ('Alice Johnson', 'alice.johnson@example.com', '987-654-3210');\nSELECT customer_full_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_spending FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY customer_full_name ORDER BY total_spending DESC LIMIT 3"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Inventory",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为产品 'Laptop X' 添加库存信息，数量为 10 件，位于仓库 A。同时，查询所有产品的总库存量和每个仓库的库存总量。",
+        "sql": "INSERT INTO Inventory (product_id, warehouse_location, quantity_in_stock, last_restock_date, reorder_threshold) VALUES ((SELECT product_id FROM Products WHERE product_name = 'Laptop X'), 'Warehouse A', 10, CURRENT_DATE(), 5);\nSELECT SUM(quantity_in_stock) AS total_products_inventory FROM Inventory GROUP BY warehouse_location"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一位新客户: John Doe, john.doe@example.com, 123-456-7890, 123 Main Street, 2023-03-15",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number, customer_shipping_address, customer_registered_date) VALUES ('John Doe', 'john.doe@example.com', '123-456-7890', '123 Main Street', '2023-03-15')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "插入一台新产品: 'Laptop X', 'Electronics', 'A high-performance laptop', 2023-03-10, 24, 'LAPX-123', 'Available', 供货商为 'TechCo'",
+        "sql": "INSERT INTO Products (product_name, product_category, product_description, product_launch_date, warranty_period_in_months, product_sku_code, product_status) VALUES ('Laptop X', 'Electronics', 'A high-performance laptop', '2023-03-10', 24, 'LAPX-123', 'Available'); INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (LAST_INSERT_ID(), (SELECT supplier_id FROM Suppliers WHERE supplier_name = 'TechCo'), 800.00, 7); "
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单的客户姓名和订单日期",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_date FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "更新'Laptop X'的屏幕尺寸为15.6英寸",
+        "sql": "UPDATE Products SET product_status = 'Discontinued' WHERE product_sku_code = 'LAPX-123'; UPDATE ProductSpecifications SET screen_size_in_inches = 15.6 WHERE product_id = (SELECT product_id FROM Products WHERE product_sku_code = 'LAPX-123')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "aggregate",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的总销售额和销量",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales, COUNT(OrderItems.order_item_id) AS total_sold FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一位新的客户：姓名为 John Doe，邮箱地址为 john.doe@example.com，联系电话为 123-456-7890，注册日期为 2023-10-26",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number, customer_registered_date) VALUES ('John Doe', 'john.doe@example.com', '123-456-7890', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品“Laptop A”分配给供应商“Tech Solutions”，供货价格为 800.00，供货周期为 5 天",
+        "sql": "INSERT INTO Products (product_name, product_category) VALUES ('Laptop A', 'Electronics'); INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES ((SELECT product_id FROM Products WHERE product_name = 'Laptop A'), (SELECT supplier_id FROM Suppliers WHERE supplier_name = 'Tech Solutions'), 800.00, 5)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "创建一个新的订单，客户ID为 1，包含一个“Laptop A”产品，数量为 2，单位价格为 800.00元",
+        "sql": "INSERT INTO Orders (customer_id, order_date, order_total_amount, order_status) VALUES (1, '2023-10-27', 1600.00, 'Processing'); INSERT INTO OrderItems (order_id, product_id, quantity, unit_price) VALUES ((SELECT order_id FROM Orders WHERE customer_id = 1 ORDER BY order_id DESC LIMIT 1), (SELECT product_id FROM Products WHERE product_name = 'Laptop A'), 2, 800.00)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "Inventory"
+        ],
+        "nl": "修改订单ID为 1的“Laptop A”产品的数量从2个减少到1个，更新库存记录，同时将重订阈值设为 50%",
+        "sql": "UPDATE Orders SET order_total_amount = (SELECT unit_price * quantity FROM OrderItems WHERE product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop A') AND order_id = 1) - (unit_price * quantity) WHERE order_id = 1; UPDATE Inventory SET quantity_in_stock = quantity_in_stock - 1 WHERE product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop A'); UPDATE Inventory SET reorder_threshold = round(quantity_in_stock * 0.50) WHERE product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop A')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "删除所有售后服务申请，其中产品ID为 (SELECT product_id FROM Products WHERE product_name = 'Laptop A') 的",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop A')"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一位新客户：姓名为 '张三'，邮箱地址为 'zhangsan@example.com'，联系电话为 '1234567890'，注册日期为 '2023-10-26'",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number, customer_registered_date) VALUES ('张三', 'zhangsan@example.com', '1234567890', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "为一款名为 '笔记本电脑' 的产品插入一条记录，并指定其供应商为 '华硕'，供货价格为 1000 元，供货周期为 7 天",
+        "sql": "INSERT INTO Products (product_name, product_category, product_description) VALUES ('笔记本电脑', '电子产品', '高性能便携式电脑');\nINSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES ((SELECT product_id FROM Products WHERE product_name = '笔记本电脑'), (SELECT supplier_id FROM Suppliers WHERE supplier_name = '华硕'), 1000, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "插入一条订单记录，客户为张三（customer_id = 1），订单总额为 2000 元，包含两款笔记本电脑（product_id 为 1 和 2）的购买信息",
+        "sql": "INSERT INTO Orders (customer_id, order_date, order_total_amount) VALUES (1, '2023-10-27', 2000);\nINSERT INTO OrderItems (order_id, product_id, quantity, unit_price) VALUES ((SELECT order_id FROM Orders WHERE customer_id = 1), 1, 1, 1000),\n(SELECT order_id FROM Orders WHERE customer_id = 1), 2, 1, 1000)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "Inventory"
+        ],
+        "nl": "为 '笔记本电脑' 产品插入一条库存记录，并更新所有供应商的供货价格为最新的市场价格（假设最新市场价格为 1200 元）",
+        "sql": "INSERT INTO Inventory (product_id, warehouse_location, quantity_in_stock, last_restock_date, reorder_threshold) VALUES ((SELECT product_id FROM Products WHERE product_name = '笔记本电脑'), '仓库A', 50, '2023-10-27', 10);\nUPDATE ProductSupplierMapping SET supply_price = 1200 WHERE product_id = (SELECT product_id FROM Products WHERE product_name = '笔记本电脑')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "select",
+            "join"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders",
+            "Products"
+        ],
+        "nl": "插入一个售后服务申请记录，订单号为 'ORD123'，产品为 '手机'（product_id 为 4），客户提交的请求日期为 '2023-10-28'，问题描述为 '屏幕破裂'。查询该售后服务申请的所有相关信息",
+        "sql": "INSERT INTO AfterSalesServiceRequests (order_id, product_id, request_date, issue_description) VALUES ('ORD123', 4, '2023-10-28', '屏幕破裂');\nSELECT * FROM AfterSalesServiceRequests WHERE order_id = 'ORD123'"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "添加一位新客户：姓名为张三，邮箱地址为zhangsan@example.com，联系电话为1234567890",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number) VALUES ('张三', 'zhangsan@example.com', '1234567890')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品 ID 为 1 的产品与供应商 ID 为 2 的供应商关联起来，供货价格为 100 元，供货周期为 7 天",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (1, 2, 100, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为订单 ID 为 100 的订单添加一个商品，产品 ID 为 5，数量为 2，单价为 50 元，折扣率为 10%",
+        "sql": "INSERT INTO OrderItems (order_id, product_id, quantity, unit_price, discount_percentage) VALUES (100, 5, 2, 50, 10)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "根据产品 ID 查询库存数量，并将所有产品的总库存量统计出来",
+        "sql": "INSERT INTO Inventory (product_id, warehouse_location, quantity_in_stock) VALUES (1, '仓库 A', 10), (2, '仓库 B', 5)\nSELECT product_id, SUM(quantity_in_stock) AS total_inventory FROM Inventory GROUP BY product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "根据产品 ID 查询售后服务申请数量，并按状态分组统计",
+        "sql": "INSERT INTO AfterSalesServiceRequests (order_id, product_id, request_date) VALUES (10, 1, '2023-10-26'), (11, 2, '2023-10-27')\nSELECT product_id, COUNT(request_id) AS request_count, resolution_status FROM AfterSalesServiceRequests JOIN Orders ON AfterSalesServiceRequests.order_id = Orders.order_id GROUP BY product_id, resolution_status"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "添加一个新客户",
+        "sql": "INSERT INTO Customers (customer_id, customer_full_name, customer_email_address, customer_contact_number, customer_shipping_address, customer_registered_date) VALUES (101, 'John Doe', 'john.doe@example.com', '555-123-4567', '123 Main Street', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品 ID 为 10 的产品与供应商 ID 为 50 的供应商关联",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (10, 50, 100.00, 7) ON DUPLICATE KEY UPDATE supply_price = 100.00, supply_lead_time_days = 7"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "select"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为订单 ID 为 201 的订单添加一项产品，产品 ID 为 5",
+        "sql": "INSERT INTO OrderItems (order_id, product_id, quantity, unit_price, discount_percentage) VALUES (201, 5, 1, 50.00, 0.00) SELECT * FROM OrderItems WHERE order_id = 201"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "更新产品 ID 为 15 的库存数量，同时将产品的仓库位置更改为 'Warehouse B'",
+        "sql": "UPDATE Inventory SET quantity_in_stock = quantity_in_stock + 2 WHERE product_id = 15 JOIN Products ON Inventory.product_id = Products.product_id AND Products.product_id = 15 UPDATE Inventory SET warehouse_location = 'Warehouse B' WHERE product_id = 15"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "delete",
+            "select"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "为订单 ID 为 200 的售后服务申请添加一条记录，然后删除该记录，最后查询所有售后服务申请的详细信息",
+        "sql": "INSERT INTO AfterSalesServiceRequests (request_id, order_id, product_id, request_date, issue_description, resolution_status, resolution_date) VALUES (101, 200, 10, '2023-10-26', 'Product malfunctioning', 'Pending', NULL) DELETE FROM AfterSalesServiceRequests WHERE request_id = 101 SELECT * FROM AfterSalesServiceRequests"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一个新的客户",
+        "sql": "INSERT INTO Customers (customer_id, customer_full_name, customer_email_address, customer_contact_number, customer_shipping_address, customer_registered_date) VALUES (101, 'John Doe', 'john.doe@example.com', '123-456-7890', '123 Main Street', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "为产品插入新的供应商信息",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (10, 5, 100.00, 7)  FROM Products JOIN Suppliers ON Products.product_id = ProductSupplierMapping.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "更新订单中的商品数量和折扣率",
+        "sql": "UPDATE OrderItems SET quantity = quantity + 1 WHERE order_id = 5 AND product_id = 2; UPDATE Orders SET order_total_amount = (SELECT SUM(unit_price * quantity) FROM OrderItems WHERE order_id = 5) WHERE order_id = 5"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "delete"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除特定订单中的所有商品并更新客户的订单数量",
+        "sql": "DELETE FROM OrderItems WHERE order_id = 10; UPDATE Customers SET total_orders = (SELECT COUNT(*) FROM Orders WHERE customer_id = 1) WHERE customer_id = 1"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "select",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "查询库存充足的产品，并按产品规格分组统计数量",
+        "sql": "INSERT INTO Inventory (inventory_id, product_id, warehouse_location, quantity_in_stock, last_restock_date, reorder_threshold) VALUES (101, 1, 'Warehouse A', 50, '2023-10-26', 20); SELECT p.product_name, COUNT(i.product_id) AS product_count FROM Products p JOIN ProductSpecifications ps ON p.product_id = ps.product_id JOIN Inventory i ON p.product_id = i.product_id GROUP BY p.product_name HAVING quantity_in_stock >= 20"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除客户姓名为 ‘张三’ 的记录",
+        "sql": "DELETE FROM Customers WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除订单ID为100的全部订单信息及相关商品明细",
+        "sql": "DELETE FROM OrderItems WHERE order_id = 100; DELETE FROM Orders WHERE order_id = 100;"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除产品名称为 ‘笔记本电脑’ 的所有相关供货信息",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE product_id IN (SELECT product_id FROM Products WHERE product_name = '笔记本电脑'); DELETE FROM Products WHERE product_name = '笔记本电脑';"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Inventory"
+        ],
+        "nl": "删除所有未发货订单中产品的库存信息并同时删除该订单及其商品明细记录",
+        "sql": "DELETE FROM Inventory WHERE product_id IN (SELECT oi.product_id FROM OrderItems oi JOIN Orders o ON oi.order_id = o.order_id WHERE o.order_status != '已发货'); DELETE FROM OrderItems WHERE order_id IN (SELECT oi.order_id FROM OrderItems oi JOIN Orders o ON oi.order_id = o.order_id WHERE o.order_status != '已发货'); DELETE FROM Orders WHERE order_status != '已发货';"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "删除所有售后服务申请记录，以及该售后服务的关联订单信息",
+        "sql": "DELETE FROM AfterSalesServiceRequests; DELETE FROM Orders WHERE order_id IN (SELECT order_id FROM AfterSalesServiceRequests);"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除id为100的客户信息",
+        "sql": "DELETE FROM Customers WHERE customer_id = 100"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有供货价格大于500的产品供货关系",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supply_price > 500"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders"
+        ],
+        "nl": "删除所有订单状态为已取消的订单",
+        "sql": "DELETE FROM Orders WHERE order_status = '已取消'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "删除所有售后服务申请的日期在2023年1月1日之前且产品型号为‘Model X’ 的记录",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE request_date < '2023-01-01' AND product_id IN (SELECT product_id FROM Products WHERE product_name = 'Model X')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory"
+        ],
+        "nl": "删除库存中产品数量小于等于10且重新订购阈值低于5的产品记录",
+        "sql": "DELETE FROM Inventory WHERE quantity_in_stock <= 10 AND reorder_threshold < 5"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除客户表中邮箱地址为'test@example.com'的记录",
+        "sql": "DELETE FROM Customers WHERE customer_email_address = 'test@example.com'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除订单号为1001的所有订单项",
+        "sql": "DELETE FROM OrderItems WHERE order_id = (SELECT order_id FROM Orders WHERE order_id = 1001)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有由供应商ID为5的供应商提供的产品",
+        "sql": "DELETE FROM Products WHERE product_id IN (SELECT product_id FROM ProductSupplierMapping WHERE supplier_id = 5)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "删除订单中包含销售额超过1000元的商品的所有订单记录",
+        "sql": "DELETE FROM Orders WHERE order_id IN (SELECT DISTINCT o.order_id FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id JOIN Products p ON oi.product_id = p.product_id WHERE oi.unit_price * oi.quantity > 1000)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Inventory",
+            "Orders"
+        ],
+        "nl": "删除库存量在过去三个月内一直低于reorder_threshold的产品记录",
+        "sql": "DELETE FROM Inventory i WHERE i.product_id IN (SELECT product_id FROM (SELECT product_id, MIN(last_restock_date) AS min_restock_date FROM Inventory GROUP BY product_id) AS subquery WHERE DATE(min_restock_date) < DATE('now', '-3 months') AND i.quantity_in_stock < i.reorder_threshold)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除id为100的客户",
+        "sql": "DELETE FROM Customers WHERE customer_id = 100"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单中包含产品 id 为 5 的订单项",
+        "sql": "DELETE FROM OrderItems WHERE product_id = 5"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有由供应商 id 为 20 的供应商供应的产品",
+        "sql": "DELETE FROM Products WHERE product_id IN (SELECT product_id FROM ProductSupplierMapping WHERE supplier_id = 20)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "删除所有在过去三个月内没有销售记录的产品",
+        "sql": "DELETE FROM Products WHERE product_id NOT IN (SELECT DISTINCT product_id FROM OrderItems WHERE order_date >= DATE('now', '-3 months'))"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "删除所有售后服务请求，其订单的总销售额超过 1000 元",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE order_id IN (SELECT order_id FROM Orders WHERE SUM(OrderItems.unit_price * OrderItems.quantity) > 1000)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除ID为100的客户",
+        "sql": "DELETE FROM Customers WHERE customer_id = 100"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单总金额小于500元的订单及其明细",
+        "sql": "DELETE FROM OrderItems oi JOIN Orders o ON oi.order_id = o.order_id WHERE o.order_total_amount < 500;"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除由供应商ID为1的供应商提供的所有产品",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supplier_id = 1;"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有在2023年8月之前提交并且包含‘屏幕破裂’问题的售后服务申请的订单及其明细",
+        "sql": "DELETE FROM OrderItems oi JOIN Orders o ON oi.order_id = o.order_id  JOIN AfterSalesServiceRequests asr ON o.order_id = asr.order_id WHERE asr.request_date < '2023-08-01' AND asr.issue_description LIKE '%屏幕破裂%';"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "删除库存量低于5台并且产品发布日期在2022年1月之前的所有产品及其对应的库存记录",
+        "sql": "DELETE FROM Inventory i JOIN Products p ON i.product_id = p.product_id WHERE i.quantity_in_stock < 5 AND p.product_launch_date < '2022-01-01';"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除客户ID为1的客户信息",
+        "sql": "DELETE FROM Customers WHERE customer_id = 1"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单中商品数量大于等于5的订单信息",
+        "sql": "DELETE o FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id WHERE oi.quantity >= 5"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有由供应商ID为2的供应商供应的产品信息",
+        "sql": "DELETE p FROM Products p JOIN ProductSupplierMapping ps ON p.product_id = ps.product_id WHERE ps.supplier_id = 2"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "删除所有订单中商品价格高于平均商品价格的订单信息",
+        "sql": "DELETE o FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id JOIN Products p ON oi.product_id = p.product_id WHERE oi.unit_price > (SELECT AVG(oi2.unit_price) FROM OrderItems oi2); "
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Customers"
+        ],
+        "nl": "删除每个客户购买商品总数量排名前5%的客户的订单信息",
+        "sql": "DELETE o FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id JOIN Customers c ON o.customer_id = c.customer_id WHERE c.customer_id IN (SELECT customer_id FROM (SELECT customer_id, SUM(oi2.quantity) AS total_quantity FROM Orders o2 JOIN OrderItems oi2 ON o2.order_id = oi2.order_id GROUP BY customer_id ORDER BY total_quantity DESC) WHERE ROWNUM <= 5) "
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除id为100的客户",
+        "sql": "DELETE FROM Customers WHERE customer_id = 100"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单号为500的订单及其关联的商品",
+        "sql": "DELETE FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE order_id = 500) DELETE FROM Orders WHERE order_id = 500"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有与供应商id为10的商品关系",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supplier_id = 10"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Inventory"
+        ],
+        "nl": "删除所有订单号大于1000且产品库存小于5的订单及其关联的商品和库存记录",
+        "sql": "DELETE FROM OrderItems oi JOIN Orders o ON oi.order_id = o.order_id WHERE o.order_id > 1000 AND oi.product_id IN (SELECT product_id FROM Inventory WHERE quantity_in_stock < 5) DELETE FROM Orders WHERE order_id IN (SELECT order_id FROM OrderItems) DELETE FROM Inventory WHERE product_id IN (SELECT product_id FROM OrderItems)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "删除所有产品型号为 'P123' 的产品及其对应配置信息",
+        "sql": "DELETE FROM ProductSpecifications WHERE product_id IN (SELECT product_id FROM Products WHERE product_name = 'P123') DELETE FROM Products WHERE product_name = 'P123'"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除客户姓名是“张三”的记录",
+        "sql": "DELETE FROM Customers WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除订单号为“1001”的所有订单和订单项",
+        "sql": "DELETE FROM OrderItems WHERE order_id = '1001' DELETE FROM Orders WHERE order_id = '1001'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有由供应商ID为“2”提供的产品的记录",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supplier_id = '2'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "删除所有售后服务申请记录，申请日期早于‘2023-01-01’且产品ID在“Products”表中未找到的记录",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE request_date < '2023-01-01' AND product_id NOT IN (SELECT product_id FROM Products)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory"
+        ],
+        "nl": "删除库存量小于‘5’且最后补货日期早于‘2023-01-01’的记录",
+        "sql": "DELETE FROM Inventory WHERE quantity_in_stock < 5 AND last_restock_date < '2023-01-01'"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除所有邮箱地址包含'example.com' 的客户",
+        "sql": "DELETE FROM Customers WHERE customer_email_address LIKE '%example.com%'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有订单状态为'已取消'，并且由供应商id为10 的产品供货的订单记录及相关映射信息",
+        "sql": "DELETE FROM Orders WHERE order_status = '已取消' AND EXISTS (SELECT 1 FROM ProductSupplierMapping WHERE Products.product_id = ProductSupplierMapping.product_id AND ProductSupplierMapping.supplier_id = 10); DELETE FROM ProductSupplierMapping WHERE product_id IN (SELECT product_id FROM Orders WHERE order_status = '已取消');"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory",
+            "Orders"
+        ],
+        "nl": "删除库存数量为0的所有产品，以及与这些产品的订单项信息",
+        "sql": "DELETE FROM Inventory WHERE quantity_in_stock = 0; DELETE FROM OrderItems WHERE product_id IN (SELECT product_id FROM Inventory WHERE quantity_in_stock = 0);"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders",
+            "Products"
+        ],
+        "nl": "删除所有售后服务请求中，产品型号为'ProductX' 的记录，同时删除相关订单和产品的关联信息，保证数据一致性",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE product_id IN (SELECT product_id FROM Products WHERE product_name = 'ProductX'); DELETE FROM Orders WHERE order_id IN (SELECT order_id FROM AfterSalesServiceRequests WHERE product_id IN (SELECT product_id FROM Products WHERE product_name = 'ProductX')); DELETE FROM Products WHERE product_name = 'ProductX';"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有客户未完成的订单，以及相关产品供应信息和客户自身信息，但保留已完成订单的信息",
+        "sql": "DELETE FROM Customers WHERE customer_id IN (SELECT DISTINCT customer_id FROM Orders WHERE order_status = '未完成'); DELETE FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE order_status = '未完成'); DELETE FROM Orders WHERE order_status = '未完成'; DELETE FROM ProductSupplierMapping WHERE product_id IN (SELECT product_id FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE order_status = '未完成'));"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除顾客John Doe的所有信息",
+        "sql": "DELETE FROM Customers WHERE customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单日期在2023-01-01之前以及对应订单商品的明细信息",
+        "sql": "DELETE FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE order_date < '2023-01-01') DELETE FROM Orders WHERE order_date < '2023-01-01'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有产品类别为'笔记本电脑'并且供货价格大于500美元的产品信息以及对应的供应商关系信息",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE product_id IN (SELECT product_id FROM Products WHERE product_category = '笔记本电脑' AND supply_price > 500) DELETE FROM Products WHERE product_category = '笔记本电脑' AND supply_price > 500"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products",
+            "Customers"
+        ],
+        "nl": "删除所有顾客年龄大于25岁并且购买了笔记本电脑且订单金额超过1000美元的订单信息以及对应的商品明细和产品信息",
+        "sql": "DELETE o FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id JOIN Products p ON oi.product_id = p.product_id JOIN Customers c ON o.customer_id = c.customer_id WHERE c.customer_age > 25 AND p.product_category = '笔记本电脑' AND o.order_total_amount > 1000 DELETE FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE customer_age > 25 AND product_category = '笔记本电脑' AND order_total_amount > 1000) DELETE FROM Products WHERE product_id IN (SELECT product_id FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE customer_age > 25 AND product_category = '笔记本电脑' AND order_total_amount > 1000))"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "删除库存数量小于10且产品型号为'X86-4G'的产品信息以及对应的库存记录",
+        "sql": "DELETE i FROM Inventory i JOIN Products p ON i.product_id = p.product_id WHERE i.quantity_in_stock < 10 AND p.product_name = 'X86-4G' DELETE FROM Products WHERE product_name = 'X86-4G'"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户姓名为 'John Doe' 的联系号码为 '123-456-7890' ",
+        "sql": "UPDATE Customers SET customer_contact_number = '123-456-7890' WHERE customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "修改所有供应商价格为产品价格的两倍",
+        "sql": "UPDATE ProductSupplierMapping SET supply_price = Products.product_launch_date * 2 FROM Products WHERE Products.product_id = ProductSupplierMapping.product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "根据产品的型号，调整所有订单项的价格，增加10% ，但如果订单项数量大于5个，价格则保持不变",
+        "sql": "UPDATE OrderItems SET unit_price = (SELECT product_launch_date * 1.1 FROM Products WHERE product_id = OrderItems.product_id) WHERE OrderItems.quantity <= 5  ORDER BY Orders.order_date;"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除与供应商id为1的供应商有关的产品信息",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supplier_id = 1;"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "删除所有订单项，其所属产品在库存数量小于5的情况下",
+        "sql": "DELETE FROM OrderItems oi WHERE EXISTS (SELECT 1 FROM Inventory i WHERE i.product_id = oi.product_id AND i.quantity_in_stock < 5);"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户名为张三的联系电话为13800138000",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800138000' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将所有产品供应价格提高10%",
+        "sql": "UPDATE Products SET product_price = Products.product_price * 1.10 FROM ProductSupplierMapping WHERE Products.product_id = ProductSupplierMapping.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将所有订单中的商品数量减去1",
+        "sql": "UPDATE OrderItems SET quantity = quantity - 1 FROM Orders WHERE Orders.order_id = OrderItems.order_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "如果某个产品在库存数量低于50件，则将该产品的售价降低10%",
+        "sql": "UPDATE Products SET product_price = Products.product_price * 0.9 WHERE Products.product_id IN (SELECT ProductSpecifications.product_id FROM ProductSpecifications JOIN Inventory ON ProductSpecifications.product_id = Inventory.product_id WHERE Inventory.quantity_in_stock < 50)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Customers",
+            "Orders"
+        ],
+        "nl": "将所有在过去一个月内有订单的客户的注册日期设置为今天",
+        "sql": "UPDATE Customers SET customer_registered_date = CURRENT_DATE WHERE customer_id IN (SELECT DISTINCT customer_id FROM Orders WHERE order_date >= DATE('now', '-1 month'))"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "将客户姓名‘张三’的联系电话修改为 ‘13800138000’",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800138000' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "修改产品‘笔记本电脑A’的供货价格为1000元",
+        "sql": "UPDATE Products SET product_price = 1000 WHERE product_name = '笔记本电脑A' UPDATE ProductSupplierMapping SET supply_price = 1000 WHERE product_id = (SELECT product_id FROM Products WHERE product_name = '笔记本电脑A')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将订单‘1001’中商品‘手机B’的折扣百分比从10%修改为20%",
+        "sql": "UPDATE OrderItems SET discount_percentage = 20 WHERE order_id = '1001' AND product_name = '手机B'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "修改‘游戏主机C’的CPU型号为‘酷睿i9’，并将库存数量增加50个",
+        "sql": "UPDATE Products SET product_description = '游戏主机C更新' WHERE product_name = '游戏主机C' UPDATE ProductSpecifications SET processor_model = '酷睿i9' WHERE product_id = (SELECT product_id FROM Products WHERE product_name = '游戏主机C') UPDATE Inventory SET quantity_in_stock = quantity_in_stock + 50 WHERE product_id = (SELECT product_id FROM Products WHERE product_name = '游戏主机C')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Suppliers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将供应商‘北京公司’的联系邮箱更改为‘beijing.company@example.com’，并修改该供应商的供货周期为5天",
+        "sql": "UPDATE Suppliers SET supplier_contact_email = 'beijing.company@example.com' WHERE supplier_name = '北京公司' UPDATE ProductSupplierMapping SET supply_lead_time_days = 5 WHERE supplier_id = (SELECT supplier_id FROM Suppliers WHERE supplier_name = '北京公司')"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户姓名为 '李四'",
+        "sql": "UPDATE Customers SET customer_full_name = '李四' WHERE customer_id = 1"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品 '笔记本电脑' 的供货价格修改为 800 元",
+        "sql": "UPDATE Products SET product_price = 800 WHERE product_id IN (SELECT product_id FROM ProductSupplierMapping WHERE product_name = '笔记本电脑')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将订单号为 1000 的商品的折扣百分比设置为 10%",
+        "sql": "UPDATE OrderItems SET discount_percentage = 10 WHERE order_id IN (SELECT order_id FROM Orders WHERE order_id = 1000)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "将库存中 '笔记本电脑' 的数量减少 5 台，并更新其屏幕尺寸为 14 英寸",
+        "sql": "UPDATE Inventory SET quantity_in_stock = quantity_in_stock - 5 WHERE product_id IN (SELECT product_id FROM Products WHERE product_name = '笔记本电脑') AND warehouse_location = '总部仓库' \n UPDATE ProductSpecifications SET screen_size_in_inches = 14 WHERE product_id IN (SELECT product_id FROM Products WHERE product_name = '笔记本电脑')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Customers"
+        ],
+        "nl": "将所有订单中客户姓名为 '张三' 的订单状态修改为 '已发货'",
+        "sql": "UPDATE Orders SET order_status = '已发货' WHERE customer_id IN (SELECT customer_id FROM Customers WHERE customer_full_name = '张三') AND order_id IN (SELECT order_id FROM OrderItems GROUP BY order_id)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户张三的联系电话为13800138000",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800138000' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将所有笔记本电脑的供货价格增加10%",
+        "sql": "UPDATE Products SET product_status = 'Out of Stock' WHERE product_category = 'Laptop'; UPDATE ProductSupplierMapping SET supply_price = supply_price * 1.1 WHERE product_id IN (SELECT product_id FROM Products WHERE product_category = 'Laptop')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将所有订单中的商品价格减去5%",
+        "sql": "UPDATE OrderItems SET unit_price = unit_price * 0.95 WHERE order_id IN (SELECT order_id FROM Orders)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Inventory",
+            "ProductSpecifications"
+        ],
+        "nl": "如果一款产品的屏幕尺寸大于15英寸，则增加库存数量，否则减少库存数量",
+        "sql": "UPDATE Inventory SET quantity_in_stock = CASE WHEN ProductSpecifications.screen_size_in_inches > 15 THEN quantity_in_stock + 10 ELSE quantity_in_stock - 5 END WHERE Inventory.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "对于所有已解决的售后服务申请，将订单状态更新为‘已完成’",
+        "sql": "UPDATE Orders SET order_status = 'Completed' WHERE order_id IN (SELECT DISTINCT order_id FROM AfterSalesServiceRequests WHERE resolution_status = 'Resolved')"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户张三的联系电话为13800001234",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800001234' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "更新所有由供应商ABC供应的产品的供货价格为100元",
+        "sql": "UPDATE Products SET supply_price = 100 WHERE product_id IN (SELECT product_id FROM ProductSupplierMapping WHERE supplier_id = (SELECT supplier_id FROM Suppliers WHERE supplier_name = 'ABC'))"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将所有订单商品的折扣百分比增加1%",
+        "sql": "UPDATE OrderItems SET discount_percentage = discount_percentage + 0.01 WHERE order_id IN (SELECT order_id FROM Orders)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "将所有来自供应商XYZ的产品订单的总金额减去10%，并将该金额更新到Orders表中",
+        "sql": "UPDATE Orders SET order_total_amount = (order_total_amount * 0.9) WHERE order_id IN (SELECT order_id FROM OrderItems JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Suppliers.supplier_name = 'XYZ')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "将所有产品库存数量大于50的产品的更新其reorder_threshold设置为100",
+        "sql": "UPDATE Inventory SET reorder_threshold = 100 WHERE product_id IN (SELECT product_id FROM Products WHERE quantity_in_stock > 50)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户John Doe的联系电话为123-456-7890",
+        "sql": "UPDATE Customers SET customer_contact_number = '123-456-7890' WHERE customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将所有供应商为ABC公司的产品价格提高10%",
+        "sql": "UPDATE Products SET product_price = (SELECT supply_price * 1.1 FROM ProductSupplierMapping WHERE ProductSupplierMapping.product_id = Products.product_id AND SupplierName = 'ABC Company')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "如果一个订单包含笔记本电脑，则将该订单的总金额增加10%",
+        "sql": "UPDATE Orders SET order_total_amount = (SELECT SUM(unit_price * quantity) + (SELECT CASE WHEN product_category = 'Laptop' THEN 0.1 * SUM(unit_price * quantity) ELSE 0 END FROM OrderItems WHERE OrderItems.order_id = Orders.order_id) FROM OrderItems WHERE OrderItems.order_id = Orders.order_id)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "如果一个产品在过去三个月内销售数量超过10个，则将该产品的库存数量减少5%",
+        "sql": "UPDATE Products SET product_stock = (SELECT product_stock * 0.95 FROM Products WHERE Product.product_id IN (SELECT DISTINCT product_id FROM OrderItems WHERE order_date >= DATE('now', '-3 months')) AND COUNT(*) > 10) WHERE EXISTS(SELECT product_id FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id WHERE Products.product_id = Product.product_id AND order_date >= DATE('now', '-3 months') GROUP BY Products.product_id HAVING COUNT(*) > 10)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "如果一个客户过去的订单总金额超过前5%的客户总订单金额，则将该客户的折扣比例提高1%",
+        "sql": "UPDATE Customers SET customer_discount = (SELECT COALESCE(SUM(order_total_amount), 0) + 1 FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE CustomerId = Customers.customer_id AND order_date < CURRENT_DATE GROUP BY CustomerId HAVING SUM(order_total_amount) > (SELECT PERCENTILE_CONT(0.05) WITHIN GROUP (ORDER BY SUM(order_total_amount)) FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY CustomerId))"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户张三的联系方式为 13800000000",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800000000' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将所有CPU型号为Intel Core i7的产品的供货价格调整为1000元",
+        "sql": "UPDATE Products p JOIN ProductSupplierMapping ps ON p.product_id = ps.product_id SET p.supply_price = 1000 WHERE p.processor_model = 'Intel Core i7'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "修改所有订单中产品数量为3的订单项的价格为100元",
+        "sql": "UPDATE OrderItems oi JOIN Orders o ON oi.order_id = o.order_id SET oi.unit_price = 100 WHERE oi.quantity = 3"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "如果某个产品的库存量低于50，则将其供货价格提高10元",
+        "sql": "UPDATE Products p JOIN ProductSpecifications ps ON p.product_id = ps.product_id JOIN Inventory i ON p.product_id = i.product_id SET p.supply_price = p.supply_price + 10 WHERE i.quantity_in_stock < 50"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders",
+            "Products"
+        ],
+        "nl": "将所有售后申请状态为‘已解决’且产品型号为'笔记本电脑'的订单修改为已完成",
+        "sql": "UPDATE AfterSalesServiceRequests AS ASR JOIN Orders AS O ON ASR.order_id = O.order_id JOIN Products AS P ON O.product_id = P.product_id SET O.order_status = '已完成' WHERE ASR.resolution_status = '已解决' AND P.product_name = '笔记本电脑'"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "将客户张三的联系电话更新为13800001234",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800001234' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "将所有产品屏幕大小更新为15.6英寸",
+        "sql": "UPDATE Products p JOIN ProductSpecifications ps ON p.product_id = ps.product_id SET p.product_name = '新名称' WHERE p.product_category = '笔记本电脑'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将订单号为10001的所有产品的折扣率修改为5%",
+        "sql": "UPDATE OrderItems oi JOIN Orders o ON oi.order_id = o.order_id SET oi.discount_percentage = 5 WHERE o.order_id = 10001"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Inventory",
+            "Orders"
+        ],
+        "nl": "根据每个产品的库存数量，更新产品价格。库存量低于5个的产品价格增加10%",
+        "sql": "UPDATE Products p JOIN Inventory i ON p.product_id = i.product_id SET p.unit_price = p.unit_price * 1.1 WHERE i.quantity_in_stock < 5"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "将所有售后服务申请状态为'已解决'的订单的配送跟踪号更新为 'tracking_number'",
+        "sql": "UPDATE AfterSalesServiceRequests asr JOIN Orders o ON asr.order_id = o.order_id SET o.shipping_tracking_number = 'tracking_number' WHERE asr.resolution_status = '已解决'"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户 John Doe 的联系电话为 123-456-7890",
+        "sql": "UPDATE Customers SET customer_contact_number = '123-456-7890' WHERE customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将供应商名称为 'ABC Electronics' 的产品的供货价格提高 10%",
+        "sql": "UPDATE Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id SET supply_price = supply_price * 1.1 WHERE Supplier.supplier_name = 'ABC Electronics'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将订单 ID 为 101 的商品中特定产品的折扣百分比从 5% 增加到 10%",
+        "sql": "UPDATE OrderItems SET discount_percentage = 0.1 WHERE order_id = 101 AND product_name = 'Laptop Model X'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Inventory",
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "当库存中某个产品的数量降至reorder_threshold时，更新该产品在所有订单中的价格为新的市场价格",
+        "sql": "UPDATE Inventory JOIN Products ON Inventory.product_id = Products.product_id SET  Products.product_price = market_price WHERE Inventory.quantity_in_stock <= Inventory.reorder_threshold;"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders",
+            "Products"
+        ],
+        "nl": "当售后服务请求的解决状态为 'resolved' 时，更新该产品的 warranty_period_in_months 为剩余期限",
+        "sql": "UPDATE AfterSalesServiceRequests JOIN Orders ON AfterSalesServiceRequests.order_id = Orders.order_id JOIN Products ON Orders.product_id = Products.product_id SET Products.warranty_period_in_months = Products.warranty_period_in_months - (DATEDIFF(CURDATE(), AfterSalesServiceRequests.resolution_date)) / 30 WHERE AfterSalesServiceRequests.resolution_status = 'resolved'"
+    }
+]

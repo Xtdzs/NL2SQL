@@ -1,0 +1,72 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和其CPU型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单总数",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品在过去一个月销售的平均数量",
+        "sql": "SELECT Products.product_name, AVG(OrderItems.quantity) OVER (PARTITION BY Products.product_id ORDER BY OrderItems.order_id ASC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS average_sales_last_month FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = OrderItems.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE OrderItems.order_date >= DATE('now', '-1 month')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "查询所有售后服务请求记录的客户姓名，以及该客户最近一次购买的产品名称和售后原因描述，其中产品由供应商A供应",
+        "sql": "SELECT Customers.customer_full_name, Products.product_name, AfterSalesServiceRequests.issue_description FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Suppliers.supplier_name = '供应商A' AND AfterSalesServiceRequests.order_id IN (SELECT MAX(OrderItems.order_id) FROM OrderItems GROUP BY Customers.customer_id)"
+    }
+]

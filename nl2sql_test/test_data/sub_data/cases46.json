@@ -1,0 +1,60 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一位新的客户：姓名为 John Doe，邮箱地址为 john.doe@example.com，联系电话为 123-456-7890，注册日期为 2023-10-26",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number, customer_registered_date) VALUES ('John Doe', 'john.doe@example.com', '123-456-7890', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品“Laptop A”分配给供应商“Tech Solutions”，供货价格为 800.00，供货周期为 5 天",
+        "sql": "INSERT INTO Products (product_name, product_category) VALUES ('Laptop A', 'Electronics'); INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES ((SELECT product_id FROM Products WHERE product_name = 'Laptop A'), (SELECT supplier_id FROM Suppliers WHERE supplier_name = 'Tech Solutions'), 800.00, 5)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "创建一个新的订单，客户ID为 1，包含一个“Laptop A”产品，数量为 2，单位价格为 800.00元",
+        "sql": "INSERT INTO Orders (customer_id, order_date, order_total_amount, order_status) VALUES (1, '2023-10-27', 1600.00, 'Processing'); INSERT INTO OrderItems (order_id, product_id, quantity, unit_price) VALUES ((SELECT order_id FROM Orders WHERE customer_id = 1 ORDER BY order_id DESC LIMIT 1), (SELECT product_id FROM Products WHERE product_name = 'Laptop A'), 2, 800.00)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "Inventory"
+        ],
+        "nl": "修改订单ID为 1的“Laptop A”产品的数量从2个减少到1个，更新库存记录，同时将重订阈值设为 50%",
+        "sql": "UPDATE Orders SET order_total_amount = (SELECT unit_price * quantity FROM OrderItems WHERE product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop A') AND order_id = 1) - (unit_price * quantity) WHERE order_id = 1; UPDATE Inventory SET quantity_in_stock = quantity_in_stock - 1 WHERE product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop A'); UPDATE Inventory SET reorder_threshold = round(quantity_in_stock * 0.50) WHERE product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop A')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "删除所有售后服务申请，其中产品ID为 (SELECT product_id FROM Products WHERE product_name = 'Laptop A') 的",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE product_id = (SELECT product_id FROM Products WHERE product_name = 'Laptop A')"
+    }
+]

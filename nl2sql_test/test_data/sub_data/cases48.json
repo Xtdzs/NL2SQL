@@ -1,0 +1,67 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "添加一位新客户：姓名为张三，邮箱地址为zhangsan@example.com，联系电话为1234567890",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number) VALUES ('张三', 'zhangsan@example.com', '1234567890')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品 ID 为 1 的产品与供应商 ID 为 2 的供应商关联起来，供货价格为 100 元，供货周期为 7 天",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (1, 2, 100, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为订单 ID 为 100 的订单添加一个商品，产品 ID 为 5，数量为 2，单价为 50 元，折扣率为 10%",
+        "sql": "INSERT INTO OrderItems (order_id, product_id, quantity, unit_price, discount_percentage) VALUES (100, 5, 2, 50, 10)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "根据产品 ID 查询库存数量，并将所有产品的总库存量统计出来",
+        "sql": "INSERT INTO Inventory (product_id, warehouse_location, quantity_in_stock) VALUES (1, '仓库 A', 10), (2, '仓库 B', 5)\nSELECT product_id, SUM(quantity_in_stock) AS total_inventory FROM Inventory GROUP BY product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "根据产品 ID 查询售后服务申请数量，并按状态分组统计",
+        "sql": "INSERT INTO AfterSalesServiceRequests (order_id, product_id, request_date) VALUES (10, 1, '2023-10-26'), (11, 2, '2023-10-27')\nSELECT product_id, COUNT(request_id) AS request_count, resolution_status FROM AfterSalesServiceRequests JOIN Orders ON AfterSalesServiceRequests.order_id = Orders.order_id GROUP BY product_id, resolution_status"
+    }
+]

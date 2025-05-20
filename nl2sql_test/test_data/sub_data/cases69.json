@@ -1,0 +1,68 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "将客户张三的联系电话更新为13800001234",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800001234' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "将所有产品屏幕大小更新为15.6英寸",
+        "sql": "UPDATE Products p JOIN ProductSpecifications ps ON p.product_id = ps.product_id SET p.product_name = '新名称' WHERE p.product_category = '笔记本电脑'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将订单号为10001的所有产品的折扣率修改为5%",
+        "sql": "UPDATE OrderItems oi JOIN Orders o ON oi.order_id = o.order_id SET oi.discount_percentage = 5 WHERE o.order_id = 10001"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Inventory",
+            "Orders"
+        ],
+        "nl": "根据每个产品的库存数量，更新产品价格。库存量低于5个的产品价格增加10%",
+        "sql": "UPDATE Products p JOIN Inventory i ON p.product_id = i.product_id SET p.unit_price = p.unit_price * 1.1 WHERE i.quantity_in_stock < 5"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "将所有售后服务申请状态为'已解决'的订单的配送跟踪号更新为 'tracking_number'",
+        "sql": "UPDATE AfterSalesServiceRequests asr JOIN Orders o ON asr.order_id = o.order_id SET o.shipping_tracking_number = 'tracking_number' WHERE asr.resolution_status = '已解决'"
+    }
+]

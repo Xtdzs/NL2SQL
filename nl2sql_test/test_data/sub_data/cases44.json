@@ -1,0 +1,68 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一个新的客户信息：姓名为 John Doe，邮箱地址为 john.doe@example.com，电话号码为 123-456-7890",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number) VALUES ('John Doe', 'john.doe@example.com', '123-456-7890')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "为产品型号为 'Laptop X' 的供应商添加信息，供应商名为 'Tech Solutions'，供货价格为 1000.00 美元，供货周期为 7 天",
+        "sql": "INSERT INTO Products (product_name, product_category, product_description, product_launch_date, warranty_period_in_months, product_sku_code, product_status) VALUES ('Laptop X', 'Laptop', 'High-performance laptop', '2023-10-26', 12, 'LAPTOPX001', 'Available');\nINSERT INTO Suppliers (supplier_name, supplier_contact_email, supplier_contact_number, supplier_country) VALUES ('Tech Solutions', 'techsolutions@example.com', '555-123-4567', 'USA');\nINSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES ((SELECT product_id FROM Products WHERE product_name = 'Laptop X'), (SELECT supplier_id FROM Suppliers WHERE supplier_name = 'Tech Solutions'), 1000.00, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为一个订单添加商品信息，订单号为 12345，购买了 'Laptop X' 产品，数量为 2 件，单价为 1000.00 美元，没有折扣",
+        "sql": "INSERT INTO Orders (customer_id, order_date, order_total_amount, order_status, shipping_tracking_number, estimated_delivery_date) VALUES ((SELECT customer_id FROM Customers WHERE customer_full_name = 'John Doe'), '2023-10-27', 2000.00, 'Processing', 'ORD-12345-ABC', '2023-11-05');\nINSERT INTO OrderItems (order_id, product_id, quantity, unit_price, discount_percentage) VALUES (LAST_INSERT_ID(), (SELECT product_id FROM Products WHERE product_name = 'Laptop X'), 2, 1000.00, 0)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "aggregate"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "根据每个客户的总订单金额，将客户排序并显示前三个最大的消费者的姓名和总消费金额。同时，为每一个新客户插入一条记录",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number) VALUES ('Alice Johnson', 'alice.johnson@example.com', '987-654-3210');\nSELECT customer_full_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_spending FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY customer_full_name ORDER BY total_spending DESC LIMIT 3"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Inventory",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为产品 'Laptop X' 添加库存信息，数量为 10 件，位于仓库 A。同时，查询所有产品的总库存量和每个仓库的库存总量。",
+        "sql": "INSERT INTO Inventory (product_id, warehouse_location, quantity_in_stock, last_restock_date, reorder_threshold) VALUES ((SELECT product_id FROM Products WHERE product_name = 'Laptop X'), 'Warehouse A', 10, CURRENT_DATE(), 5);\nSELECT SUM(quantity_in_stock) AS total_products_inventory FROM Inventory GROUP BY warehouse_location"
+    }
+]

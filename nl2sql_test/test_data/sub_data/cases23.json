@@ -1,0 +1,72 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和对应的处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有在 2023 年 10 月 1 日之后提交的订单的客户姓名和订单总金额",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_total_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE Orders.order_date > '2023-10-01'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的销售数量和总销售额",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.order_item_id) AS sale_count, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "filter",
+            "window function"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的产品销售额排名，按销售额从高到低排序，并显示前5名供应商",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales, RANK() OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS sales_rank FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Suppliers.supplier_name ORDER BY sales_rank ASC LIMIT 5"
+    }
+]

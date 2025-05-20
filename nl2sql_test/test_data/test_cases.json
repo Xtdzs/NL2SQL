@@ -1,0 +1,2767 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户订单的总数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品在所有订单中的总销量排名",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.quantity) AS total_sales, RANK() OVER (ORDER BY SUM(OrderItems.quantity) DESC) as sales_rank FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Products",
+            "Orders"
+        ],
+        "nl": "查询产品出现售后问题的次数超过5次的产品及其对应的订单id和售后请求时间",
+        "sql": "SELECT Products.product_name, Orders.order_id, AfterSalesServiceRequests.request_date FROM Products JOIN AfterSalesServiceRequests ON Products.product_id = AfterSalesServiceRequests.product_id JOIN Orders ON AfterSalesServiceRequests.order_id = Orders.order_id WHERE (SELECT COUNT(*) FROM AfterSalesServiceRequests WHERE product_id = Products.product_id) > 5"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和其CPU型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单总数",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品在过去一个月销售的平均数量",
+        "sql": "SELECT Products.product_name, AVG(OrderItems.quantity) OVER (PARTITION BY Products.product_id ORDER BY OrderItems.order_id ASC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS average_sales_last_month FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = OrderItems.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE OrderItems.order_date >= DATE('now', '-1 month')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "查询所有售后服务请求记录的客户姓名，以及该客户最近一次购买的产品名称和售后原因描述，其中产品由供应商A供应",
+        "sql": "SELECT Customers.customer_full_name, Products.product_name, AfterSalesServiceRequests.issue_description FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Suppliers.supplier_name = '供应商A' AND AfterSalesServiceRequests.order_id IN (SELECT MAX(OrderItems.order_id) FROM OrderItems GROUP BY Customers.customer_id)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有在2023年1月1日之后下单的客户的信息",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_date FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id WHERE Orders.order_date >= '2023-01-01'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的销售总量和平均销售价格",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.quantity) AS total_sales_quantity, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_sale_price FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "having"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询供应商的产品数量大于5的供应商名称",
+        "sql": "SELECT Suppliers.supplier_name FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id GROUP BY Suppliers.supplier_name HAVING COUNT(DISTINCT Products.product_id) > 5"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单总数",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询销售额最高的10个产品的名称和总销售额，排序按照总销售额降序",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name ORDER BY total_sales DESC LIMIT 10"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的平均商品价格，并按订单总价排序",
+        "sql": "SELECT OrderItems.order_id, AVG(OrderItems.unit_price) AS average_item_price, SUM(OrderItems.unit_price * OrderItems.quantity) AS order_total FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY OrderItems.order_id ORDER BY order_total DESC"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单，但只显示那些由John Doe创建的订单",
+        "sql": "SELECT Orders.*, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE Customers.customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Customers"
+        ],
+        "nl": "查询每个客户的平均订单金额和他们购买的产品数量",
+        "sql": "SELECT Customers.customer_full_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_order_amount, COUNT(DISTINCT Products.product_id) AS product_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "filter",
+            "window function"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的平均商品价格，并按订单金额降序排列",
+        "sql": "SELECT order_id, AVG(unit_price) OVER (PARTITION BY order_id) AS average_item_price FROM OrderItems ORDER BY SUM(unit_price * quantity) DESC"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称、屏幕尺寸和处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "根据产品分类统计每个订单的总销售额",
+        "sql": "SELECT Products.product_category, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_category"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "where",
+            "having"
+        ],
+        "tables": [
+            "ProductSpecifications",
+            "Products"
+        ],
+        "nl": "查询内存大于8GB且产品发布日期在2022年之后的商品信息",
+        "sql": "SELECT Products.product_name, ProductSpecifications.ram_capacity_in_gb FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id WHERE ProductSpecifications.ram_capacity_in_gb > 8 AND Products.product_launch_date >= '2022-01-01'"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称和对应的供应商联系电话",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_contact_number FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有在2023年10月提交的订单及其客户姓名",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE DATE(Orders.order_date) BETWEEN '2023-10-01' AND '2023-10-31'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "统计每个产品的销量排名",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Products.product_name ORDER BY total_sales DESC"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "filter",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "Customers",
+            "ProductSpecifications"
+        ],
+        "nl": "查询每个客户在过去三个月的订单中，笔记本电脑的平均处理器速度和存储容量",
+        "sql": "SELECT Customers.customer_full_name, AVG(ProductSpecifications.processor_model) OVER (PARTITION BY Customers.customer_id ORDER BY Orders.order_date ASC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS avg_processor_speed, AVG(ProductSpecifications.storage_capacity_in_gb) OVER (PARTITION BY Customers.customer_id ORDER BY Orders.order_date ASC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS avg_storage_capacity FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN ProductSpecifications ON Orders.product_id = ProductSpecifications.product_id WHERE DATE(Orders.order_date) >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和邮箱地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和对应的屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单总金额",
+        "sql": "SELECT Customers.customer_full_name, SUM(Orders.order_total_amount) AS total_spent FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "按供应商分组，查询每个供应商的产品数量和总供应价格",
+        "sql": "SELECT Suppliers.supplier_name, COUNT(DISTINCT Products.product_id) AS product_count, SUM(ProductSupplierMapping.supply_price) AS total_supply_price FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "where",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询所有订单中的产品，但排除那些产品的屏幕尺寸小于14英寸的产品",
+        "sql": "SELECT OrderItems.product_id, Products.product_name FROM OrderItems JOIN Products ON OrderItems.product_id = Products.product_id WHERE OrderItems.product_id IN (SELECT product_id FROM ProductSpecifications WHERE screen_size_in_inches >= 14)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和邮箱地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和其对应的处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的总数量和平均单价",
+        "sql": "SELECT Orders.order_id, SUM(OrderItems.quantity) AS total_quantity, AVG(OrderItems.unit_price) AS average_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Orders.order_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "Orders"
+        ],
+        "nl": "查询销售额最高的供应商，并列出其产品的名称和总销售额",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Suppliers.supplier_name HAVING SUM(OrderItems.unit_price * OrderItems.quantity) IN (SELECT MAX(total_sales) FROM (SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Suppliers.supplier_name) AS sales_summary)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的平均单价，并与上一个订单的平均单价进行比较",
+        "sql": "SELECT Orders.order_id, AVG(OrderItems.unit_price) AS average_price, LAG(AVG(OrderItems.unit_price)) OVER (ORDER BY Orders.order_date) AS previous_average_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Orders.order_id"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称以及对应的处理器型号和内存容量",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model, ProductSpecifications.ram_capacity_in_gb FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品在所有订单中的平均销售价格和累计销量排名",
+        "sql": "SELECT Products.product_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_sale_price, RANK() OVER (ORDER BY SUM(OrderItems.quantity)) AS sales_rank FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "查询供货价格最高的供应商以及他们供货的产品数量",
+        "sql": "SELECT Suppliers.supplier_name, COUNT(ProductSupplierMapping.product_id) AS product_count FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id WHERE ProductSupplierMapping.supply_price IN (SELECT MAX(supply_price) FROM ProductSupplierMapping GROUP BY supplier_id) GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和它的处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "where"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询销售额最高的三个产品的名称和总销售额，其中销售额大于1000元。",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name HAVING total_sales > 1000 ORDER BY total_sales DESC LIMIT 3"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询每个产品类别下，RAM容量最大的产品的名称和RAM容量",
+        "sql": "WITH RankedProducts AS (SELECT product_category, product_name, ram_capacity_in_gb, ROW_NUMBER() OVER (PARTITION BY product_category ORDER BY ram_capacity_in_gb DESC) AS rn FROM ProductSpecifications JOIN Products ON ProductSpecifications.product_id = Products.product_id) SELECT product_name, ram_capacity_in_gb FROM RankedProducts WHERE rn = 1"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单，并根据客户姓名筛选订单",
+        "sql": "SELECT Orders.*, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE Customers.customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Customers"
+        ],
+        "nl": "查询每个客户的平均订单金额和平均购买产品数量",
+        "sql": "SELECT Customers.customer_full_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_order_amount, AVG(OrderItems.quantity) AS average_product_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "查询所有产品的名称，以及对应供应商的供应价格低于平均供应价格的产品数量",
+        "sql": "SELECT Products.product_name, COUNT(*) AS count_of_products FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE ProductSupplierMapping.supply_price < (SELECT AVG(supply_price) FROM ProductSupplierMapping) GROUP BY Products.product_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和存储容量",
+        "sql": "SELECT Products.product_name, ProductSpecifications.storage_capacity_in_gb FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的销售额和产品数量",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales, COUNT(DISTINCT Products.product_id) AS product_count FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Inventory",
+            "Orders"
+        ],
+        "nl": "查询库存数量大于10的商品名称，以及该商品在订单中的销售记录",
+        "sql": "SELECT Products.product_name FROM Products JOIN Inventory ON Products.product_id = Inventory.product_id WHERE Inventory.quantity_in_stock > 10\nUNION ALL SELECT ProductSpecifications.processor_model, OrderItems.order_id FROM Inventory JOIN Products ON Inventory.product_id = Products.product_id JOIN  ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = Orders.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE Inventory.quantity_in_stock > 10"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "where"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询在2023年1月订购的笔记本电脑数量，由供应商A供应",
+        "sql": "SELECT COUNT(DISTINCT OrderItems.product_id) AS notebook_count FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Products.product_category = 'Laptop' AND Orders.order_date BETWEEN '2023-01-01' AND '2023-01-31' AND Suppliers.supplier_name = '供应商A'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by",
+            "having"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询销售额超过1000元的商品分类，并统计每个分类的销售额",
+        "sql": "SELECT Products.product_category, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_category HAVING total_sales > 1000"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和邮箱地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品型号和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单，订单状态为“已发货”并且客户姓名为 '张三'",
+        "sql": "SELECT * FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE Orders.order_status = '已发货' AND Customers.customer_full_name = '张三'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的总销售额，销量超过10件的产品显示出来",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name HAVING SUM(OrderItems.unit_price * OrderItems.quantity) > 10"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的平均供货价格，并根据平均供货价格降序排列",
+        "sql": "SELECT Suppliers.supplier_name, AVG(ProductSupplierMapping.supply_price) AS avg_supply_price FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id GROUP BY Suppliers.supplier_name ORDER BY avg_supply_price DESC"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品在过去一年的销售数量，并根据每个产品的总销量进行排名",
+        "sql": "SELECT Products.product_name, SUM(CASE WHEN OrderItems.order_date >= DATE('now', '-1 year') THEN 1 ELSE 0 END) AS sales_in_last_year, RANK() OVER (ORDER BY SUM(CASE WHEN OrderItems.order_date >= DATE('now', '-1 year') THEN 1 ELSE 0 END) DESC) AS product_rank FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id LEFT JOIN Orders ON Products.product_id = Orders.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "subquery"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "ProductSupplierMapping",
+            "Products"
+        ],
+        "nl": "查询所有客户，以及他们购买产品的供应商名称和总消费金额，其中总消费金额超过平均消费金额的客户",
+        "sql": "SELECT Customers.customer_full_name, Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_spending FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN ProductSupplierMapping ON OrderItems.product_id = ProductSupplierMapping.product_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Customers.customer_id IN (SELECT customer_id FROM Customers GROUP BY customer_id HAVING SUM(Orders.order_total_amount) > (SELECT AVG(order_total_amount) FROM Orders)) GROUP BY Customers.customer_full_name, Suppliers.supplier_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Products"
+        ],
+        "nl": "查询所有订单及其对应的产品名称",
+        "sql": "SELECT Orders.order_id, Products.product_name FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称为‘Laptop A1’的供应商名称",
+        "sql": "SELECT Suppliers.supplier_name FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Products.product_name = 'Laptop A1'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品销售总额，并按销量降序排序",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name ORDER BY total_sales DESC"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "查询客户姓名，以及该客户所有售后服务的请求日期和描述",
+        "sql": "SELECT Customers.customer_full_name, AfterSalesServiceRequests.request_date, AfterSalesServiceRequests.issue_description FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN AfterSalesServiceRequests ON Orders.order_id = AfterSalesServiceRequests.order_id"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "where"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有来自美国客户的订单的总金额",
+        "sql": "SELECT SUM(OrderItems.unit_price * OrderItems.quantity) AS total_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE Customers.customer_country = '美国'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的供应产品数量最多的产品类型",
+        "sql": "SELECT Suppliers.supplier_name, Products.product_category, COUNT(*) AS product_count FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id GROUP BY Suppliers.supplier_name, Products.product_category ORDER BY product_count DESC LIMIT 1"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询所有订单中，产品价格超过平均价格的订单信息",
+        "sql": "SELECT * FROM Orders WHERE order_id IN (SELECT order_id FROM OrderItems GROUP BY order_id HAVING AVG(unit_price) < (SELECT AVG(unit_price) FROM OrderItems))"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和对应的处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单的ID、客户姓名和订单日期",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name, Orders.order_date FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品的销售数量和总销售额",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.order_item_id) AS sales_count, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的平均商品单价，按照订单日期排序并分组",
+        "sql": "SELECT order_date, AVG(unit_price * quantity) AS average_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY order_date ORDER BY order_date;"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称和对应的供应商的国家",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_country FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单，订单日期大于2023-08-01，并显示客户姓名和订单总金额",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_total_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE Orders.order_date > '2023-08-01'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品在所有订单中的总销售额",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "window function"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单中，每个产品的销售额排名和总销售额前三名产品的信息",
+        "sql": "SELECT o.order_id, oi.product_id, oi.unit_price * oi.quantity AS sales, RANK() OVER (PARTITION BY o.order_id ORDER BY oi.unit_price * oi.quantity DESC) as product_rank FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id ORDER BY o.order_id, product_rank ASC LIMIT 3"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品型号及其对应的屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "where"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询所有销售额超过1000美元的产品供应商名称和产品数量",
+        "sql": "SELECT Suppliers.supplier_name, COUNT(Products.product_id) AS product_count FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE SUM(ProductSupplierMapping.supply_price * 1000) > 1000 GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "OrderItems",
+            "Orders"
+        ],
+        "nl": "查询每个订单的平均商品单价和每个订单中最高价格的商品名称",
+        "sql": "SELECT Orders.order_id, AVG(OrderItems.unit_price) AS average_item_price, MAX(CASE WHEN OrderItems.unit_price = (SELECT MAX(OrderItems.unit_price) FROM OrderItems WHERE order_id = Orders.order_id) THEN Products.product_name ELSE NULL END) AS highest_priced_product_name FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Orders.order_id"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和对应的处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品的平均销售价格和过去一周的销售额排名",
+        "sql": "SELECT Products.product_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_sale_price, ROW_NUMBER() OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS sales_rank FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = Orders.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE Orders.order_date >= DATEADD(day, -7, GETDATE()) GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Suppliers",
+            "ProductSupplierMapping",
+            "Products"
+        ],
+        "nl": "查询所有供应商中，供应产品数量超过10个的供应商名称",
+        "sql": "SELECT Suppliers.supplier_name FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id WHERE Suppliers.supplier_id IN (SELECT supplier_id FROM ProductSupplierMapping GROUP BY supplier_id HAVING COUNT(DISTINCT product_id) > 10)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和对应的处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有在 2023 年 10 月 1 日之后提交的订单的客户姓名和订单总金额",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_total_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE Orders.order_date > '2023-10-01'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的销售数量和总销售额",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.order_item_id) AS sale_count, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "filter",
+            "window function"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的产品销售额排名，按销售额从高到低排序，并显示前5名供应商",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales, RANK() OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS sales_rank FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Suppliers.supplier_name ORDER BY sales_rank ASC LIMIT 5"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每种产品的总销售额，按销售额降序排列",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name ORDER BY total_sales DESC"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Customers"
+        ],
+        "nl": "查询每个客户最近一次订单的日期和该订单总金额",
+        "sql": "SELECT Customers.customer_full_name, MAX(Orders.order_date) AS last_order_date, SUM(OrderItems.unit_price * OrderItems.quantity) AS order_total FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name ORDER BY last_order_date DESC"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的总金额",
+        "sql": "SELECT Orders.order_id, SUM(OrderItems.unit_price * OrderItems.quantity) AS order_total FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Orders.order_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "Customers",
+            "Products"
+        ],
+        "nl": "查询每个客户购买的总金额和平均订单价值",
+        "sql": "SELECT Customers.customer_full_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_spent, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_order_value FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "window function"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的平均购买价格，并按订单日期排序",
+        "sql": "SELECT order_id, AVG(unit_price * quantity) OVER (PARTITION BY order_id ORDER BY request_date) AS average_purchase_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称和供应商联系电话",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_contact_email FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单，并且客户姓名是John Doe的订单金额",
+        "sql": "SELECT OrderItems.unit_price * OrderItems.quantity AS order_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE Customers.customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "filter"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品型号的平均屏幕尺寸，并且屏幕尺寸大于15英寸的产品",
+        "sql": "SELECT Products.product_name, AVG(ProductSpecifications.screen_size_in_inches) AS average_screen_size FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = Orders.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE ProductSpecifications.screen_size_in_inches > 15 GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单平均金额和该客户所有订单的总金额排名",
+        "sql": "SELECT Customers.customer_full_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_order_amount, SUM(OrderItems.unit_price * OrderItems.quantity) OVER (PARTITION BY Customers.customer_id) AS total_order_amount, RANK() OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS rank FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询所有产品及其对应的供应商名称和联系电话",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_name, Suppliers.supplier_contact_email FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单及其对应的客户姓名和下单日期",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name, Orders.order_date FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品的销售数量和总销售额",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.order_item_id) AS sales_count, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "having"
+        ],
+        "tables": [
+            "Orders",
+            "Customers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "查询所有在2023年下单的客户，并按供应商订单总金额降序排序",
+        "sql": "SELECT Customers.customer_full_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id WHERE Orders.order_date BETWEEN '2023-01-01' AND '2023-12-31' GROUP BY Customers.customer_full_name HAVING SUM(OrderItems.unit_price * OrderItems.quantity) > 1000 ORDER BY total_sales DESC"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和对应的屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户订单的总金额",
+        "sql": "SELECT Customers.customer_full_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_order_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "ProductSupplierMapping",
+            "Products"
+        ],
+        "nl": "查询每个产品的平均供货价格，并按平均供货价格排序",
+        "sql": "SELECT Products.product_name, AVG(ProductSupplierMapping.supply_price) OVER (PARTITION BY Products.product_id ORDER BY ProductSupplierMapping.supply_price) AS avg_supply_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id GROUP BY Products.product_name ORDER BY avg_supply_price DESC"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "Products"
+        ],
+        "nl": "查询已购买过产品的客户姓名，并过滤掉没有在过去一个月内进行过购买的客户",
+        "sql": "SELECT Customers.customer_full_name FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN Products ON Orders.order_id = OrderItems.order_id WHERE Orders.order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单总数",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group_by"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的产品销售总额，按总销售额降序排列",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Suppliers.supplier_name ORDER BY total_sales DESC"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "window_function"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的销售额和排名，按销售额降序排列",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS sales, RANK() OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS product_rank FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单的日期和客户姓名",
+        "sql": "SELECT Orders.order_date, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的产品平均价格",
+        "sql": "SELECT Suppliers.supplier_name, AVG(OrderItems.unit_price) AS average_product_price FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的总销售额和平均销售量",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales, AVG(OrderItems.quantity) AS average_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和存储容量",
+        "sql": "SELECT Products.product_name, ProductSpecifications.storage_capacity_in_gb FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单总数",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品最近一次销售的价格排名，并按照价格降序排序",
+        "sql": "SELECT Products.product_name, OrderItems.unit_price, RANK() OVER (PARTITION BY Products.product_id ORDER BY OrderItems.order_id DESC) AS price_rank FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "查询所有售后服务申请，并且订单总金额大于1000元的产品",
+        "sql": "SELECT * FROM AfterSalesServiceRequests WHERE order_id IN (SELECT order_id FROM Orders WHERE order_total_amount > 1000)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的电子邮件地址",
+        "sql": "SELECT customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和其处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询订单号和客户姓名",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的产品总销量",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id JOIN Orders ON Products.product_id = Orders.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "查询每个产品类别下，库存数量大于10且处理器型号为“Intel Core i7”的产品",
+        "sql": "SELECT Products.product_name, Products.product_category FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Inventory ON Products.product_id = Inventory.product_id WHERE ProductSpecifications.processor_model = 'Intel Core i7' AND Inventory.quantity_in_stock > 10 GROUP BY Products.product_name, Products.product_category"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询所有产品名称和其对应的供应商的联系方式",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_contact_email FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单总数和总金额",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count, SUM(Orders.order_total_amount) AS total_amount FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品销售额排名靠前的，以及每个产品的平均电池续航时间",
+        "sql": "WITH RankedSales AS (SELECT Products.product_id, SUM(OrderItems.unit_price * OrderItems.quantity) AS sales_amount FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Products.product_id ORDER BY sales_amount DESC) SELECT p.product_name, rs.sales_amount, AVG(ps.battery_life_estimation_hours) OVER (PARTITION BY p.product_id ORDER BY rs.sales_amount DESC) AS avg_battery_life FROM Products p JOIN RankedSales rs ON p.product_id = rs.product_id JOIN ProductSpecifications ps ON p.product_id = ps.product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询销售额最高的供应商，并显示该供应商供应的产品数量和总销售额",
+        "sql": "SELECT s.supplier_name, COUNT(p.product_id) AS product_count, SUM(oi.unit_price * oi.quantity) AS total_sales FROM Suppliers s JOIN ProductSupplierMapping psm ON s.supplier_id = psm.supplier_id JOIN Products p ON psm.product_id = p.product_id JOIN OrderItems oi ON p.product_id = oi.product_id WHERE s.supplier_id IN (SELECT supplier_id FROM ProductSupplierMapping GROUP BY supplier_id ORDER BY SUM(oi.unit_price * oi.quantity) DESC LIMIT 1) GROUP BY s.supplier_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单的客户姓名和订单总金额",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_total_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的型号和屏幕大小",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品的销售数量和总销售额",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.order_item_id) AS product_sales_count, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_revenue FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品的销售数量排名和总销售额排名",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.order_item_id) OVER (ORDER BY COUNT(OrderItems.order_item_id) DESC) AS sales_rank, SUM(OrderItems.unit_price * OrderItems.quantity) OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS revenue_rank FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称、处理器型号和存储容量",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model, ProductSpecifications.storage_capacity_in_gb FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询订单ID、客户姓名和订单日期",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name, Orders.order_date FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品在不同供应商下的销售额",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id JOIN Orders ON Products.product_id = Orders.order_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Products.product_name, Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品的平均内存大小和销售额排名靠前",
+        "sql": "SELECT Products.product_name, AVG(ProductSpecifications.ram_capacity_in_gb) AS average_memory, RANK() OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS sales_rank FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = Orders.order_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称、供应商名称和供货价格",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_name, ProductSupplierMapping.supply_price FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单状态为'已发货'的客户姓名和订单日期",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_date FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id WHERE Orders.order_status = '已发货'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "filter"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品类型下的平均销售价格，以及总销量超过100的product_name",
+        "sql": "SELECT Products.product_category, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_sale_price FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_category HAVING SUM(OrderItems.quantity) > 100 UNION SELECT product_name, '' AS average_sale_price FROM Products WHERE product_id IN (SELECT DISTINCT product_id FROM OrderItems WHERE quantity > 100)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "Inventory",
+            "ProductSupplierMapping"
+        ],
+        "nl": "查询每个订单的商品总价，以及其对应产品的供应链成本和库存数量排名",
+        "sql": "SELECT Orders.order_id, SUM(OrderItems.unit_price * OrderItems.quantity) AS order_total_value, ProductSupplierMapping.supply_price AS supply_chain_cost, (SELECT quantity_in_stock FROM Inventory WHERE product_id = Products.product_id ORDER BY quantity_in_stock DESC) AS inventory_rank FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id WINDOW w AS (ORDER BY supply_price)"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的注册日期",
+        "sql": "SELECT customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Products"
+        ],
+        "nl": "查询所有订单及其对应的产品名称",
+        "sql": "SELECT Orders.order_id, Products.product_name FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的型号和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers",
+            "Products"
+        ],
+        "nl": "查询每个客户在过去一个月购买的产品种类数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(DISTINCT Products.product_name) AS product_count FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id WHERE Orders.order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品在过去一个月内的销售额排名，并显示该产品的销售额和排名",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS sales_amount, RANK() OVER (PARTITION BY Products.product_id ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS product_rank FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id WHERE Orders.order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) GROUP BY Products.product_name"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和其对应的屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量和总消费金额",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count, SUM(Orders.order_total_amount) AS total_spent FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品销量排名和该产品在所有产品的平均销售价格",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.quantity) OVER (PARTITION BY Products.product_id ORDER BY COUNT(OrderItems.quantity) DESC) AS sales_rank, AVG(OrderItems.unit_price * OrderItems.quantity) OVER () AS average_sale_price FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "查询所有订单中出现售后服务的客户的姓名和售后服务申请日期",
+        "sql": "SELECT Customers.customer_full_name, AfterSalesServiceRequests.request_date FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN AfterSalesServiceRequests ON Orders.order_id = AfterSalesServiceRequests.order_id GROUP BY Customers.customer_full_name, AfterSalesServiceRequests.request_date"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询订单号和客户姓名",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Customers"
+        ],
+        "nl": "查询每个客户的平均订单金额",
+        "sql": "SELECT Customers.customer_full_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_order_amount FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的平均商品价格，按日期排序",
+        "sql": "SELECT order_date, AVG(unit_price) OVER (PARTITION BY order_id ORDER BY order_item_id) AS average_product_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id ORDER BY order_date"
+    },
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的电子邮件地址",
+        "sql": "SELECT customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称和供货商联系电话，条件是产品分类为'笔记本电脑'",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_contact_number FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Products.product_category = '笔记本电脑'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Products"
+        ],
+        "nl": "查询每个产品的销售数量",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.order_item_id) AS product_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Customers"
+        ],
+        "nl": "查询每个客户的平均订单金额和排名",
+        "sql": "SELECT Customers.customer_full_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_order_amount, RANK() OVER (ORDER BY AVG(OrderItems.unit_price * OrderItems.quantity) DESC) AS rank FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders"
+        ],
+        "nl": "查询产品名称和处理器型号，条件是产品的存储容量大于500GB且最近订单日期在2023年1月1日之后",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id WHERE ProductSpecifications.storage_capacity_in_gb > 500 AND Products.product_id IN (SELECT product_id FROM Orders WHERE order_date >= '2023-01-01')"
+    }
+]

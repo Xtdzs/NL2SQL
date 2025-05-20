@@ -1,0 +1,71 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和对应的屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户订单的总金额",
+        "sql": "SELECT Customers.customer_full_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_order_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "ProductSupplierMapping",
+            "Products"
+        ],
+        "nl": "查询每个产品的平均供货价格，并按平均供货价格排序",
+        "sql": "SELECT Products.product_name, AVG(ProductSupplierMapping.supply_price) OVER (PARTITION BY Products.product_id ORDER BY ProductSupplierMapping.supply_price) AS avg_supply_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id GROUP BY Products.product_name ORDER BY avg_supply_price DESC"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "Products"
+        ],
+        "nl": "查询已购买过产品的客户姓名，并过滤掉没有在过去一个月内进行过购买的客户",
+        "sql": "SELECT Customers.customer_full_name FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN Products ON Orders.order_id = OrderItems.order_id WHERE Orders.order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) GROUP BY Customers.customer_full_name"
+    }
+]

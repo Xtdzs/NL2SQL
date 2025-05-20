@@ -1,0 +1,71 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品型号及其对应的屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "where"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询所有销售额超过1000美元的产品供应商名称和产品数量",
+        "sql": "SELECT Suppliers.supplier_name, COUNT(Products.product_id) AS product_count FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE SUM(ProductSupplierMapping.supply_price * 1000) > 1000 GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "OrderItems",
+            "Orders"
+        ],
+        "nl": "查询每个订单的平均商品单价和每个订单中最高价格的商品名称",
+        "sql": "SELECT Orders.order_id, AVG(OrderItems.unit_price) AS average_item_price, MAX(CASE WHEN OrderItems.unit_price = (SELECT MAX(OrderItems.unit_price) FROM OrderItems WHERE order_id = Orders.order_id) THEN Products.product_name ELSE NULL END) AS highest_priced_product_name FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Orders.order_id"
+    }
+]

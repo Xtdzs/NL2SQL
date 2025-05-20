@@ -1,0 +1,61 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一个新的客户信息",
+        "sql": "INSERT INTO Customers (customer_id, customer_full_name, customer_email_address, customer_contact_number, customer_shipping_address, customer_registered_date) VALUES (101, '张三', 'zhangsan@example.com', '1234567890', '北京市海淀区', '2023-03-15')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "为产品'笔记本电脑'添加供应商信息，并设定供应价格和供货周期",
+        "sql": "INSERT INTO Products (product_id, product_name, product_category, product_description, product_launch_date, warranty_period_in_months, product_sku_code, product_status) VALUES (102, '笔记本电脑', '笔记本', '高性能笔记本电脑', '2023-03-01', 12, 'NB-123', '在售')\nINSERT INTO Suppliers (supplier_id, supplier_name, supplier_contact_email, supplier_contact_number, supplier_country) VALUES (103, '供应商A', 'a@example.com', '9876543210', '中国')\nINSERT INTO ProductSupplierMapping (mapping_id, product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (101, 102, 103, 5000.00, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为客户'李四'创建一个订单，包含两台笔记本电脑",
+        "sql": "INSERT INTO Orders (order_id, customer_id, order_date, order_total_amount, order_status, shipping_tracking_number, estimated_delivery_date) VALUES (104, 102, '2023-03-16', 10000.00, '已支付', 'TRK-12345', '2023-03-23')\nINSERT INTO OrderItems (order_item_id, order_id, product_id, quantity, unit_price, discount_percentage) VALUES (105, 104, 102, 2, 5000.00, 0.00)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "更新产品'笔记本电脑'的处理器型号为'英特尔酷睿i9'，并且屏幕尺寸由15英寸改为16英寸",
+        "sql": "UPDATE Products SET product_description = '高性能笔记本电脑, 英特尔酷睿i9 处理器' WHERE product_id = 102\nUPDATE ProductSpecifications SET processor_model = '英特尔酷睿i9' WHERE product_id = 102\nUPDATE ProductSpecifications SET screen_size_in_inches = 16.0 WHERE product_id = 102"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "删除所有关于产品'笔记本电脑'的售后服务申请记录",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE product_id = 102"
+    }
+]

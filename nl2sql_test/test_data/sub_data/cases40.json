@@ -1,0 +1,71 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的电子邮件地址",
+        "sql": "SELECT customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称和供货商联系电话，条件是产品分类为'笔记本电脑'",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_contact_number FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Products.product_category = '笔记本电脑'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Products"
+        ],
+        "nl": "查询每个产品的销售数量",
+        "sql": "SELECT Products.product_name, COUNT(OrderItems.order_item_id) AS product_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Customers"
+        ],
+        "nl": "查询每个客户的平均订单金额和排名",
+        "sql": "SELECT Customers.customer_full_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_order_amount, RANK() OVER (ORDER BY AVG(OrderItems.unit_price * OrderItems.quantity) DESC) AS rank FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders"
+        ],
+        "nl": "查询产品名称和处理器型号，条件是产品的存储容量大于500GB且最近订单日期在2023年1月1日之后",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id WHERE ProductSpecifications.storage_capacity_in_gb > 500 AND Products.product_id IN (SELECT product_id FROM Orders WHERE order_date >= '2023-01-01')"
+    }
+]

@@ -1,0 +1,60 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除ID为100的客户",
+        "sql": "DELETE FROM Customers WHERE customer_id = 100"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单总金额小于500元的订单及其明细",
+        "sql": "DELETE FROM OrderItems oi JOIN Orders o ON oi.order_id = o.order_id WHERE o.order_total_amount < 500;"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除由供应商ID为1的供应商提供的所有产品",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supplier_id = 1;"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有在2023年8月之前提交并且包含‘屏幕破裂’问题的售后服务申请的订单及其明细",
+        "sql": "DELETE FROM OrderItems oi JOIN Orders o ON oi.order_id = o.order_id  JOIN AfterSalesServiceRequests asr ON o.order_id = asr.order_id WHERE asr.request_date < '2023-08-01' AND asr.issue_description LIKE '%屏幕破裂%';"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "删除库存量低于5台并且产品发布日期在2022年1月之前的所有产品及其对应的库存记录",
+        "sql": "DELETE FROM Inventory i JOIN Products p ON i.product_id = p.product_id WHERE i.quantity_in_stock < 5 AND p.product_launch_date < '2022-01-01';"
+    }
+]

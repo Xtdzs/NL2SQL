@@ -1,0 +1,57 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除id为100的客户信息",
+        "sql": "DELETE FROM Customers WHERE customer_id = 100"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有供货价格大于500的产品供货关系",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supply_price > 500"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders"
+        ],
+        "nl": "删除所有订单状态为已取消的订单",
+        "sql": "DELETE FROM Orders WHERE order_status = '已取消'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "删除所有售后服务申请的日期在2023年1月1日之前且产品型号为‘Model X’ 的记录",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE request_date < '2023-01-01' AND product_id IN (SELECT product_id FROM Products WHERE product_name = 'Model X')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory"
+        ],
+        "nl": "删除库存中产品数量小于等于10且重新订购阈值低于5的产品记录",
+        "sql": "DELETE FROM Inventory WHERE quantity_in_stock <= 10 AND reorder_threshold < 5"
+    }
+]

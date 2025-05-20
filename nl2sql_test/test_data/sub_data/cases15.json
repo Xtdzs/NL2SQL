@@ -1,0 +1,72 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和邮箱地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品型号和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单，订单状态为“已发货”并且客户姓名为 '张三'",
+        "sql": "SELECT * FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE Orders.order_status = '已发货' AND Customers.customer_full_name = '张三'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的总销售额，销量超过10件的产品显示出来",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_name HAVING SUM(OrderItems.unit_price * OrderItems.quantity) > 10"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的平均供货价格，并根据平均供货价格降序排列",
+        "sql": "SELECT Suppliers.supplier_name, AVG(ProductSupplierMapping.supply_price) AS avg_supply_price FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id GROUP BY Suppliers.supplier_name ORDER BY avg_supply_price DESC"
+    }
+]

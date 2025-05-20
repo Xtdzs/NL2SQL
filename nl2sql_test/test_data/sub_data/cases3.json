@@ -1,0 +1,72 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有在2023年1月1日之后下单的客户的信息",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_date FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id WHERE Orders.order_date >= '2023-01-01'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的销售总量和平均销售价格",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.quantity) AS total_sales_quantity, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_sale_price FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "having"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询供应商的产品数量大于5的供应商名称",
+        "sql": "SELECT Suppliers.supplier_name FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id GROUP BY Suppliers.supplier_name HAVING COUNT(DISTINCT Products.product_id) > 5"
+    }
+]

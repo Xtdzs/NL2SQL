@@ -1,0 +1,71 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称、屏幕尺寸和处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "根据产品分类统计每个订单的总销售额",
+        "sql": "SELECT Products.product_category, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id GROUP BY Products.product_category"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "where",
+            "having"
+        ],
+        "tables": [
+            "ProductSpecifications",
+            "Products"
+        ],
+        "nl": "查询内存大于8GB且产品发布日期在2022年之后的商品信息",
+        "sql": "SELECT Products.product_name, ProductSpecifications.ram_capacity_in_gb FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id WHERE ProductSpecifications.ram_capacity_in_gb > 8 AND Products.product_launch_date >= '2022-01-01'"
+    }
+]

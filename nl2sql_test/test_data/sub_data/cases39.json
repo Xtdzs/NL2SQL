@@ -1,0 +1,69 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询订单号和客户姓名",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Customers"
+        ],
+        "nl": "查询每个客户的平均订单金额",
+        "sql": "SELECT Customers.customer_full_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_order_amount FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个订单的平均商品价格，按日期排序",
+        "sql": "SELECT order_date, AVG(unit_price) OVER (PARTITION BY order_id ORDER BY order_item_id) AS average_product_price FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id ORDER BY order_date"
+    }
+]

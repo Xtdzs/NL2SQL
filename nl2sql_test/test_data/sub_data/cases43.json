@@ -1,0 +1,60 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "添加一个新客户: 姓名为张三，邮箱地址为 zhangsan@example.com，联系电话为 1234567890，注册日期为 2023-10-26",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number, customer_registered_date) VALUES ('张三', 'zhangsan@example.com', '1234567890', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "为产品id为 1 的产品添加供应商，供应商id为 2，供货价格为 500.00，供货周期为 7 天",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (1, 2, 500.00, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "创建一个订单，客户id为 1，订单日期为 2023-10-27，总金额为 1000.00，添加一个商品，产品id为 2，数量为 2，单价为 250.00",
+        "sql": "INSERT INTO Orders (customer_id, order_date, order_total_amount) VALUES (1, '2023-10-27', 1000.00);\nINSERT INTO OrderItems (order_id, product_id, quantity, unit_price) VALUES ((SELECT MAX(order_id) FROM Orders), 2, 2, 250.00)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "将产品id为 1 的产品的处理器型号更新为 Intel Core i7-13700H，并更新屏幕大小为 15.6 英寸",
+        "sql": "UPDATE Products SET product_description = 'Updated Product Description' WHERE product_id = 1;\nUPDATE ProductSpecifications SET processor_model = 'Intel Core i7-13700H', screen_size_in_inches = 15.6 WHERE product_id = 1"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "删除所有关于产品id为 3 的售后服务申请记录，并删除关联的订单记录。",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE product_id = 3;\nDELETE FROM Orders WHERE order_id IN (SELECT order_id FROM OrderItems WHERE product_id = 3)"
+    }
+]

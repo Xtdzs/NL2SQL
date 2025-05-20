@@ -1,0 +1,72 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和联系电话",
+        "sql": "SELECT customer_full_name, customer_contact_number FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品名称和对应的处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品的平均销售价格和过去一周的销售额排名",
+        "sql": "SELECT Products.product_name, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_sale_price, ROW_NUMBER() OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS sales_rank FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = Orders.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE Orders.order_date >= DATEADD(day, -7, GETDATE()) GROUP BY Products.product_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Suppliers",
+            "ProductSupplierMapping",
+            "Products"
+        ],
+        "nl": "查询所有供应商中，供应产品数量超过10个的供应商名称",
+        "sql": "SELECT Suppliers.supplier_name FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id WHERE Suppliers.supplier_id IN (SELECT supplier_id FROM ProductSupplierMapping GROUP BY supplier_id HAVING COUNT(DISTINCT product_id) > 10)"
+    }
+]

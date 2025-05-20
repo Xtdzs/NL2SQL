@@ -1,0 +1,65 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一位新客户: John Doe, john.doe@example.com, 123-456-7890, 123 Main Street, 2023-03-15",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number, customer_shipping_address, customer_registered_date) VALUES ('John Doe', 'john.doe@example.com', '123-456-7890', '123 Main Street', '2023-03-15')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "插入一台新产品: 'Laptop X', 'Electronics', 'A high-performance laptop', 2023-03-10, 24, 'LAPX-123', 'Available', 供货商为 'TechCo'",
+        "sql": "INSERT INTO Products (product_name, product_category, product_description, product_launch_date, warranty_period_in_months, product_sku_code, product_status) VALUES ('Laptop X', 'Electronics', 'A high-performance laptop', '2023-03-10', 24, 'LAPX-123', 'Available'); INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (LAST_INSERT_ID(), (SELECT supplier_id FROM Suppliers WHERE supplier_name = 'TechCo'), 800.00, 7); "
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单的客户姓名和订单日期",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_date FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "更新'Laptop X'的屏幕尺寸为15.6英寸",
+        "sql": "UPDATE Products SET product_status = 'Discontinued' WHERE product_sku_code = 'LAPX-123'; UPDATE ProductSpecifications SET screen_size_in_inches = 15.6 WHERE product_id = (SELECT product_id FROM Products WHERE product_sku_code = 'LAPX-123')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "aggregate",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询每个产品的总销售额和销量",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales, COUNT(OrderItems.order_item_id) AS total_sold FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name"
+    }
+]

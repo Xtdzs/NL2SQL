@@ -1,0 +1,69 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除客户ID为1的客户信息",
+        "sql": "DELETE FROM Customers WHERE customer_id = 1"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单中商品数量大于等于5的订单信息",
+        "sql": "DELETE o FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id WHERE oi.quantity >= 5"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有由供应商ID为2的供应商供应的产品信息",
+        "sql": "DELETE p FROM Products p JOIN ProductSupplierMapping ps ON p.product_id = ps.product_id WHERE ps.supplier_id = 2"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "删除所有订单中商品价格高于平均商品价格的订单信息",
+        "sql": "DELETE o FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id JOIN Products p ON oi.product_id = p.product_id WHERE oi.unit_price > (SELECT AVG(oi2.unit_price) FROM OrderItems oi2); "
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Customers"
+        ],
+        "nl": "删除每个客户购买商品总数量排名前5%的客户的订单信息",
+        "sql": "DELETE o FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id JOIN Customers c ON o.customer_id = c.customer_id WHERE c.customer_id IN (SELECT customer_id FROM (SELECT customer_id, SUM(oi2.quantity) AS total_quantity FROM Orders o2 JOIN OrderItems oi2 ON o2.order_id = oi2.order_id GROUP BY customer_id ORDER BY total_quantity DESC) WHERE ROWNUM <= 5) "
+    }
+]

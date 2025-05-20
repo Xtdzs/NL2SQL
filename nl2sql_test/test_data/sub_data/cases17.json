@@ -1,0 +1,71 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Products"
+        ],
+        "nl": "查询所有订单及其对应的产品名称",
+        "sql": "SELECT Orders.order_id, Products.product_name FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称为‘Laptop A1’的供应商名称",
+        "sql": "SELECT Suppliers.supplier_name FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Products.product_name = 'Laptop A1'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品销售总额，并按销量降序排序",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_name ORDER BY total_sales DESC"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "查询客户姓名，以及该客户所有售后服务的请求日期和描述",
+        "sql": "SELECT Customers.customer_full_name, AfterSalesServiceRequests.request_date, AfterSalesServiceRequests.issue_description FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id JOIN AfterSalesServiceRequests ON Orders.order_id = AfterSalesServiceRequests.order_id"
+    }
+]

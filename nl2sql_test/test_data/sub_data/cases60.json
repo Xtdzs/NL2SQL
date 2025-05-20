@@ -1,0 +1,63 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除顾客John Doe的所有信息",
+        "sql": "DELETE FROM Customers WHERE customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单日期在2023-01-01之前以及对应订单商品的明细信息",
+        "sql": "DELETE FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE order_date < '2023-01-01') DELETE FROM Orders WHERE order_date < '2023-01-01'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有产品类别为'笔记本电脑'并且供货价格大于500美元的产品信息以及对应的供应商关系信息",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE product_id IN (SELECT product_id FROM Products WHERE product_category = '笔记本电脑' AND supply_price > 500) DELETE FROM Products WHERE product_category = '笔记本电脑' AND supply_price > 500"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products",
+            "Customers"
+        ],
+        "nl": "删除所有顾客年龄大于25岁并且购买了笔记本电脑且订单金额超过1000美元的订单信息以及对应的商品明细和产品信息",
+        "sql": "DELETE o FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id JOIN Products p ON oi.product_id = p.product_id JOIN Customers c ON o.customer_id = c.customer_id WHERE c.customer_age > 25 AND p.product_category = '笔记本电脑' AND o.order_total_amount > 1000 DELETE FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE customer_age > 25 AND product_category = '笔记本电脑' AND order_total_amount > 1000) DELETE FROM Products WHERE product_id IN (SELECT product_id FROM OrderItems WHERE order_id IN (SELECT order_id FROM Orders WHERE customer_age > 25 AND product_category = '笔记本电脑' AND order_total_amount > 1000))"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "删除库存数量小于10且产品型号为'X86-4G'的产品信息以及对应的库存记录",
+        "sql": "DELETE i FROM Inventory i JOIN Products p ON i.product_id = p.product_id WHERE i.quantity_in_stock < 10 AND p.product_name = 'X86-4G' DELETE FROM Products WHERE product_name = 'X86-4G'"
+    }
+]

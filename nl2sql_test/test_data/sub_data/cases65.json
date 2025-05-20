@@ -1,0 +1,61 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户张三的联系电话为13800138000",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800138000' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将所有笔记本电脑的供货价格增加10%",
+        "sql": "UPDATE Products SET product_status = 'Out of Stock' WHERE product_category = 'Laptop'; UPDATE ProductSupplierMapping SET supply_price = supply_price * 1.1 WHERE product_id IN (SELECT product_id FROM Products WHERE product_category = 'Laptop')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将所有订单中的商品价格减去5%",
+        "sql": "UPDATE OrderItems SET unit_price = unit_price * 0.95 WHERE order_id IN (SELECT order_id FROM Orders)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Inventory",
+            "ProductSpecifications"
+        ],
+        "nl": "如果一款产品的屏幕尺寸大于15英寸，则增加库存数量，否则减少库存数量",
+        "sql": "UPDATE Inventory SET quantity_in_stock = CASE WHEN ProductSpecifications.screen_size_in_inches > 15 THEN quantity_in_stock + 10 ELSE quantity_in_stock - 5 END WHERE Inventory.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "对于所有已解决的售后服务申请，将订单状态更新为‘已完成’",
+        "sql": "UPDATE Orders SET order_status = 'Completed' WHERE order_id IN (SELECT DISTINCT order_id FROM AfterSalesServiceRequests WHERE resolution_status = 'Resolved')"
+    }
+]

@@ -1,0 +1,58 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除客户姓名是“张三”的记录",
+        "sql": "DELETE FROM Customers WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除订单号为“1001”的所有订单和订单项",
+        "sql": "DELETE FROM OrderItems WHERE order_id = '1001' DELETE FROM Orders WHERE order_id = '1001'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有由供应商ID为“2”提供的产品的记录",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supplier_id = '2'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests"
+        ],
+        "nl": "删除所有售后服务申请记录，申请日期早于‘2023-01-01’且产品ID在“Products”表中未找到的记录",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE request_date < '2023-01-01' AND product_id NOT IN (SELECT product_id FROM Products)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Inventory"
+        ],
+        "nl": "删除库存量小于‘5’且最后补货日期早于‘2023-01-01’的记录",
+        "sql": "DELETE FROM Inventory WHERE quantity_in_stock < 5 AND last_restock_date < '2023-01-01'"
+    }
+]

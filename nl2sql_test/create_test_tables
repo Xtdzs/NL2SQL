@@ -1,0 +1,125 @@
+USE testpzy;
+CREATE TABLE Customers (
+customer_id INT,
+customer_full_name STRING,
+customer_email_address STRING,
+customer_contact_number STRING,
+customer_shipping_address STRING,
+customer_registered_date DATE
+);
+CREATE TABLE Products (
+product_id INT,
+product_name STRING,
+product_category STRING,
+product_description STRING,
+product_launch_date DATE,
+warranty_period_in_months INT,
+product_sku_code STRING,
+product_status STRING
+);
+CREATE TABLE ProductSpecifications (
+specification_id INT,
+product_id INT,
+processor_model STRING,
+ram_capacity_in_gb INT,
+storage_type STRING,
+storage_capacity_in_gb INT,
+graphics_card_model STRING,
+screen_size_in_inches DOUBLE,
+battery_life_estimation_hours DOUBLE,
+has_touchscreen BOOLEAN,
+maximum_wireless_connectivity_standard_supported STRING,
+number_of_usb_type_c_ports_supported_by_the_motherboard INT
+);
+CREATE TABLE Suppliers (
+supplier_id INT,
+supplier_name STRING,
+supplier_contact_email STRING,
+supplier_contact_number STRING,
+supplier_country STRING
+);
+CREATE TABLE ProductSupplierMapping (
+mapping_id INT,
+product_id INT,
+supplier_id INT,
+supply_price DECIMAL(10,2),
+supply_lead_time_days INT
+);
+CREATE TABLE Orders (
+order_id INT,
+customer_id INT,
+order_date DATE,
+order_total_amount DECIMAL(10,2),
+order_status STRING,
+shipping_tracking_number STRING,
+estimated_delivery_date DATE
+);
+CREATE TABLE OrderItems (
+order_item_id INT,
+order_id INT,
+product_id INT,
+quantity INT,
+unit_price DECIMAL(10,2),
+discount_percentage DECIMAL(5,2)
+);
+CREATE TABLE Inventory (
+inventory_id INT,
+product_id INT,
+warehouse_location STRING,
+quantity_in_stock INT,
+last_restock_date DATE,
+reorder_threshold INT
+);
+CREATE TABLE AfterSalesServiceRequests (
+request_id INT,
+order_id INT,
+product_id INT,
+request_date DATE,
+issue_description STRING,
+resolution_status STRING,
+resolution_date DATE
+);
+CREATE TABLE PaymentTransactions (
+transaction_id INT,
+order_id INT,
+payment_method STRING,
+transaction_date TIMESTAMP,
+transaction_amount DECIMAL(10,2),
+transaction_status STRING
+);
+
+INSERT INTO Customers VALUES
+(1, 'Alice Zhang', '[alice@example.com](mailto:alice@example.com)', '13800138000', 'Beijing, China', '2022-11-01'),
+(2, 'Bob Li', '[bob@example.com](mailto:bob@example.com)', '13700137000', 'Shanghai, China', '2023-02-15');
+INSERT INTO Suppliers VALUES
+(1, 'Intel China', '[intel-china@example.com](mailto:intel-china@example.com)', '021-55556666', 'China'),
+(2, 'NVIDIA Asia', '[nvidia-asia@example.com](mailto:nvidia-asia@example.com)', '010-77778888', 'USA');
+INSERT INTO Products VALUES
+(101, 'ProBook 450', 'Laptop', 'Business laptop with i7', '2023-01-01', 24, 'PB450-I7-2023', 'Available'),
+(102, 'GamingMaster X', 'Desktop', 'High performance gaming PC', '2023-03-10', 36, 'GMX-R9-4080', 'Available');
+INSERT INTO ProductSpecifications VALUES
+(1001, 101, 'Intel Core i7-1165G7', 16, 'SSD', 512, 'Intel Iris Xe', 15.6, 10.5, true, 'WiFi 6E', 3),
+(1002, 102, 'AMD Ryzen 9 7900X', 32, 'NVMe SSD', 2048, 'NVIDIA RTX 4080', 27.0, 0, false, 'WiFi 6E', 4);
+INSERT INTO Orders VALUES
+(5001, 1, '2024-05-01', 7500.00, 'Shipped', 'TRK123456', '2024-05-05');
+INSERT INTO OrderItems VALUES
+(9001, 5001, 101, 1, 7500.00, 0.00);
+INSERT INTO Inventory VALUES
+(2001, 101, 'Warehouse A', 50, '2024-04-20', 10),
+(2002, 102, 'Warehouse B', 30, '2024-04-25', 5);
+INSERT INTO AfterSalesServiceRequests VALUES
+(3001, 5001, 101, '2024-05-02', 'Screen flickering issue', 'Resolved', '2024-05-03');
+INSERT INTO PaymentTransactions VALUES
+(4001, 5001, 'Credit Card', '2024-05-01 10:00:00', 7500.00, 'Completed');
+
+// Delete
+DROP TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Products;
+DROP TABLE IF EXISTS ProductSpecifications;
+DROP TABLE IF EXISTS Suppliers;
+DROP TABLE IF EXISTS ProductSupplierMapping;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS OrderItems;
+DROP TABLE IF EXISTS Inventory;
+DROP TABLE IF EXISTS AfterSalesServiceRequests;
+DROP TABLE IF EXISTS PaymentTransactions;

@@ -1,0 +1,72 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称、处理器型号和存储容量",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model, ProductSpecifications.storage_capacity_in_gb FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询订单ID、客户姓名和订单日期",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name, Orders.order_date FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品在不同供应商下的销售额",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id JOIN Orders ON Products.product_id = Orders.order_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Products.product_name, Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "window"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品的平均内存大小和销售额排名靠前",
+        "sql": "SELECT Products.product_name, AVG(ProductSpecifications.ram_capacity_in_gb) AS average_memory, RANK() OVER (ORDER BY SUM(OrderItems.unit_price * OrderItems.quantity) DESC) AS sales_rank FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = Orders.order_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Products.product_name"
+    }
+]

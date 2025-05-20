@@ -1,0 +1,71 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品的名称和屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "where"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有来自美国客户的订单的总金额",
+        "sql": "SELECT SUM(OrderItems.unit_price * OrderItems.quantity) AS total_amount FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE Customers.customer_country = '美国'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的供应产品数量最多的产品类型",
+        "sql": "SELECT Suppliers.supplier_name, Products.product_category, COUNT(*) AS product_count FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id GROUP BY Suppliers.supplier_name, Products.product_category ORDER BY product_count DESC LIMIT 1"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询所有订单中，产品价格超过平均价格的订单信息",
+        "sql": "SELECT * FROM Orders WHERE order_id IN (SELECT order_id FROM OrderItems GROUP BY order_id HAVING AVG(unit_price) < (SELECT AVG(unit_price) FROM OrderItems))"
+    }
+]

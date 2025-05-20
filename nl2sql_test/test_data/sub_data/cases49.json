@@ -1,0 +1,67 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "添加一个新客户",
+        "sql": "INSERT INTO Customers (customer_id, customer_full_name, customer_email_address, customer_contact_number, customer_shipping_address, customer_registered_date) VALUES (101, 'John Doe', 'john.doe@example.com', '555-123-4567', '123 Main Street', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品 ID 为 10 的产品与供应商 ID 为 50 的供应商关联",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (10, 50, 100.00, 7) ON DUPLICATE KEY UPDATE supply_price = 100.00, supply_lead_time_days = 7"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "select"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "为订单 ID 为 201 的订单添加一项产品，产品 ID 为 5",
+        "sql": "INSERT INTO OrderItems (order_id, product_id, quantity, unit_price, discount_percentage) VALUES (201, 5, 1, 50.00, 0.00) SELECT * FROM OrderItems WHERE order_id = 201"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "更新产品 ID 为 15 的库存数量，同时将产品的仓库位置更改为 'Warehouse B'",
+        "sql": "UPDATE Inventory SET quantity_in_stock = quantity_in_stock + 2 WHERE product_id = 15 JOIN Products ON Inventory.product_id = Products.product_id AND Products.product_id = 15 UPDATE Inventory SET warehouse_location = 'Warehouse B' WHERE product_id = 15"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "delete",
+            "select"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "为订单 ID 为 200 的售后服务申请添加一条记录，然后删除该记录，最后查询所有售后服务申请的详细信息",
+        "sql": "INSERT INTO AfterSalesServiceRequests (request_id, order_id, product_id, request_date, issue_description, resolution_status, resolution_date) VALUES (101, 200, 10, '2023-10-26', 'Product malfunctioning', 'Pending', NULL) DELETE FROM AfterSalesServiceRequests WHERE request_id = 101 SELECT * FROM AfterSalesServiceRequests"
+    }
+]

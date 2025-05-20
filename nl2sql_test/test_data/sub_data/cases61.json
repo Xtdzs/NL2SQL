@@ -1,0 +1,69 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户姓名为 'John Doe' 的联系号码为 '123-456-7890' ",
+        "sql": "UPDATE Customers SET customer_contact_number = '123-456-7890' WHERE customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "修改所有供应商价格为产品价格的两倍",
+        "sql": "UPDATE ProductSupplierMapping SET supply_price = Products.product_launch_date * 2 FROM Products WHERE Products.product_id = ProductSupplierMapping.product_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "根据产品的型号，调整所有订单项的价格，增加10% ，但如果订单项数量大于5个，价格则保持不变",
+        "sql": "UPDATE OrderItems SET unit_price = (SELECT product_launch_date * 1.1 FROM Products WHERE product_id = OrderItems.product_id) WHERE OrderItems.quantity <= 5  ORDER BY Orders.order_date;"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除与供应商id为1的供应商有关的产品信息",
+        "sql": "DELETE FROM ProductSupplierMapping WHERE supplier_id = 1;"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "删除所有订单项，其所属产品在库存数量小于5的情况下",
+        "sql": "DELETE FROM OrderItems oi WHERE EXISTS (SELECT 1 FROM Inventory i WHERE i.product_id = oi.product_id AND i.quantity_in_stock < 5);"
+    }
+]

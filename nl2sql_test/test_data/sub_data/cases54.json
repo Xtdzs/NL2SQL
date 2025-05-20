@@ -1,0 +1,68 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "delete"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "删除id为100的客户",
+        "sql": "DELETE FROM Customers WHERE customer_id = 100"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除所有订单中包含产品 id 为 5 的订单项",
+        "sql": "DELETE FROM OrderItems WHERE product_id = 5"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "delete",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "删除所有由供应商 id 为 20 的供应商供应的产品",
+        "sql": "DELETE FROM Products WHERE product_id IN (SELECT product_id FROM ProductSupplierMapping WHERE supplier_id = 20)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "删除所有在过去三个月内没有销售记录的产品",
+        "sql": "DELETE FROM Products WHERE product_id NOT IN (SELECT DISTINCT product_id FROM OrderItems WHERE order_date >= DATE('now', '-3 months'))"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "delete",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders"
+        ],
+        "nl": "删除所有售后服务请求，其订单的总销售额超过 1000 元",
+        "sql": "DELETE FROM AfterSalesServiceRequests WHERE order_id IN (SELECT order_id FROM Orders WHERE SUM(OrderItems.unit_price * OrderItems.quantity) > 1000)"
+    }
+]

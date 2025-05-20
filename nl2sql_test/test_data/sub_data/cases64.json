@@ -1,0 +1,69 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户姓名为 '李四'",
+        "sql": "UPDATE Customers SET customer_full_name = '李四' WHERE customer_id = 1"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将产品 '笔记本电脑' 的供货价格修改为 800 元",
+        "sql": "UPDATE Products SET product_price = 800 WHERE product_id IN (SELECT product_id FROM ProductSupplierMapping WHERE product_name = '笔记本电脑')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将订单号为 1000 的商品的折扣百分比设置为 10%",
+        "sql": "UPDATE OrderItems SET discount_percentage = 10 WHERE order_id IN (SELECT order_id FROM Orders WHERE order_id = 1000)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "将库存中 '笔记本电脑' 的数量减少 5 台，并更新其屏幕尺寸为 14 英寸",
+        "sql": "UPDATE Inventory SET quantity_in_stock = quantity_in_stock - 5 WHERE product_id IN (SELECT product_id FROM Products WHERE product_name = '笔记本电脑') AND warehouse_location = '总部仓库' \n UPDATE ProductSpecifications SET screen_size_in_inches = 14 WHERE product_id IN (SELECT product_id FROM Products WHERE product_name = '笔记本电脑')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Customers"
+        ],
+        "nl": "将所有订单中客户姓名为 '张三' 的订单状态修改为 '已发货'",
+        "sql": "UPDATE Orders SET order_status = '已发货' WHERE customer_id IN (SELECT customer_id FROM Customers WHERE customer_full_name = '张三') AND order_id IN (SELECT order_id FROM OrderItems GROUP BY order_id)"
+    }
+]

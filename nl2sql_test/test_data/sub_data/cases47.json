@@ -1,0 +1,69 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一位新客户：姓名为 '张三'，邮箱地址为 'zhangsan@example.com'，联系电话为 '1234567890'，注册日期为 '2023-10-26'",
+        "sql": "INSERT INTO Customers (customer_full_name, customer_email_address, customer_contact_number, customer_registered_date) VALUES ('张三', 'zhangsan@example.com', '1234567890', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "为一款名为 '笔记本电脑' 的产品插入一条记录，并指定其供应商为 '华硕'，供货价格为 1000 元，供货周期为 7 天",
+        "sql": "INSERT INTO Products (product_name, product_category, product_description) VALUES ('笔记本电脑', '电子产品', '高性能便携式电脑');\nINSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES ((SELECT product_id FROM Products WHERE product_name = '笔记本电脑'), (SELECT supplier_id FROM Suppliers WHERE supplier_name = '华硕'), 1000, 7)"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "插入一条订单记录，客户为张三（customer_id = 1），订单总额为 2000 元，包含两款笔记本电脑（product_id 为 1 和 2）的购买信息",
+        "sql": "INSERT INTO Orders (customer_id, order_date, order_total_amount) VALUES (1, '2023-10-27', 2000);\nINSERT INTO OrderItems (order_id, product_id, quantity, unit_price) VALUES ((SELECT order_id FROM Orders WHERE customer_id = 1), 1, 1, 1000),\n(SELECT order_id FROM Orders WHERE customer_id = 1), 2, 1, 1000)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers",
+            "Inventory"
+        ],
+        "nl": "为 '笔记本电脑' 产品插入一条库存记录，并更新所有供应商的供货价格为最新的市场价格（假设最新市场价格为 1200 元）",
+        "sql": "INSERT INTO Inventory (product_id, warehouse_location, quantity_in_stock, last_restock_date, reorder_threshold) VALUES ((SELECT product_id FROM Products WHERE product_name = '笔记本电脑'), '仓库A', 50, '2023-10-27', 10);\nUPDATE ProductSupplierMapping SET supply_price = 1200 WHERE product_id = (SELECT product_id FROM Products WHERE product_name = '笔记本电脑')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "select",
+            "join"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders",
+            "Products"
+        ],
+        "nl": "插入一个售后服务申请记录，订单号为 'ORD123'，产品为 '手机'（product_id 为 4），客户提交的请求日期为 '2023-10-28'，问题描述为 '屏幕破裂'。查询该售后服务申请的所有相关信息",
+        "sql": "INSERT INTO AfterSalesServiceRequests (order_id, product_id, request_date, issue_description) VALUES ('ORD123', 4, '2023-10-28', '屏幕破裂');\nSELECT * FROM AfterSalesServiceRequests WHERE order_id = 'ORD123'"
+    }
+]

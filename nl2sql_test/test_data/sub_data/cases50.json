@@ -1,0 +1,68 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "insert"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "插入一个新的客户",
+        "sql": "INSERT INTO Customers (customer_id, customer_full_name, customer_email_address, customer_contact_number, customer_shipping_address, customer_registered_date) VALUES (101, 'John Doe', 'john.doe@example.com', '123-456-7890', '123 Main Street', '2023-10-26')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "为产品插入新的供应商信息",
+        "sql": "INSERT INTO ProductSupplierMapping (product_id, supplier_id, supply_price, supply_lead_time_days) VALUES (10, 5, 100.00, 7)  FROM Products JOIN Suppliers ON Products.product_id = ProductSupplierMapping.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "insert",
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "更新订单中的商品数量和折扣率",
+        "sql": "UPDATE OrderItems SET quantity = quantity + 1 WHERE order_id = 5 AND product_id = 2; UPDATE Orders SET order_total_amount = (SELECT SUM(unit_price * quantity) FROM OrderItems WHERE order_id = 5) WHERE order_id = 5"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "delete"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "删除特定订单中的所有商品并更新客户的订单数量",
+        "sql": "DELETE FROM OrderItems WHERE order_id = 10; UPDATE Customers SET total_orders = (SELECT COUNT(*) FROM Orders WHERE customer_id = 1) WHERE customer_id = 1"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "insert",
+            "select",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "查询库存充足的产品，并按产品规格分组统计数量",
+        "sql": "INSERT INTO Inventory (inventory_id, product_id, warehouse_location, quantity_in_stock, last_restock_date, reorder_threshold) VALUES (101, 1, 'Warehouse A', 50, '2023-10-26', 20); SELECT p.product_name, COUNT(i.product_id) AS product_count FROM Products p JOIN ProductSpecifications ps ON p.product_id = ps.product_id JOIN Inventory i ON p.product_id = i.product_id GROUP BY p.product_name HAVING quantity_in_stock >= 20"
+    }
+]

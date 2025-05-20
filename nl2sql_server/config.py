@@ -1,0 +1,12 @@
+service_host = ""
+service_port = 0
+service_reload = False
+service_workers = 0
+db_host=""
+db_port=0
+db_user=""
+db_catalog=""
+db_schema=""
+ollama_host = ""
+common_model_name = ""
+sql_model_name = ""

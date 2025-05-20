@@ -1,0 +1,62 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "将客户姓名‘张三’的联系电话修改为 ‘13800138000’",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800138000' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "修改产品‘笔记本电脑A’的供货价格为1000元",
+        "sql": "UPDATE Products SET product_price = 1000 WHERE product_name = '笔记本电脑A' UPDATE ProductSupplierMapping SET supply_price = 1000 WHERE product_id = (SELECT product_id FROM Products WHERE product_name = '笔记本电脑A')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将订单‘1001’中商品‘手机B’的折扣百分比从10%修改为20%",
+        "sql": "UPDATE OrderItems SET discount_percentage = 20 WHERE order_id = '1001' AND product_name = '手机B'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "修改‘游戏主机C’的CPU型号为‘酷睿i9’，并将库存数量增加50个",
+        "sql": "UPDATE Products SET product_description = '游戏主机C更新' WHERE product_name = '游戏主机C' UPDATE ProductSpecifications SET processor_model = '酷睿i9' WHERE product_id = (SELECT product_id FROM Products WHERE product_name = '游戏主机C') UPDATE Inventory SET quantity_in_stock = quantity_in_stock + 50 WHERE product_id = (SELECT product_id FROM Products WHERE product_name = '游戏主机C')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Suppliers",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将供应商‘北京公司’的联系邮箱更改为‘beijing.company@example.com’，并修改该供应商的供货周期为5天",
+        "sql": "UPDATE Suppliers SET supplier_contact_email = 'beijing.company@example.com' WHERE supplier_name = '北京公司' UPDATE ProductSupplierMapping SET supply_lead_time_days = 5 WHERE supplier_id = (SELECT supplier_id FROM Suppliers WHERE supplier_name = '北京公司')"
+    }
+]

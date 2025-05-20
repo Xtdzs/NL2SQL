@@ -1,0 +1,72 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名",
+        "sql": "SELECT customer_full_name FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称和对应的供应商联系电话",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_contact_number FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有在2023年10月提交的订单及其客户姓名",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id WHERE DATE(Orders.order_date) BETWEEN '2023-10-01' AND '2023-10-31'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "统计每个产品的销量排名",
+        "sql": "SELECT Products.product_name, SUM(OrderItems.quantity) AS total_sales FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id GROUP BY Products.product_name ORDER BY total_sales DESC"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "filter",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "Customers",
+            "ProductSpecifications"
+        ],
+        "nl": "查询每个客户在过去三个月的订单中，笔记本电脑的平均处理器速度和存储容量",
+        "sql": "SELECT Customers.customer_full_name, AVG(ProductSpecifications.processor_model) OVER (PARTITION BY Customers.customer_id ORDER BY Orders.order_date ASC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS avg_processor_speed, AVG(ProductSpecifications.storage_capacity_in_gb) OVER (PARTITION BY Customers.customer_id ORDER BY Orders.order_date ASC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS avg_storage_capacity FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id JOIN ProductSpecifications ON Orders.product_id = ProductSpecifications.product_id WHERE DATE(Orders.order_date) >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)"
+    }
+]

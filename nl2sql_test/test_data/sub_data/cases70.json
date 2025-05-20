@@ -1,0 +1,64 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户 John Doe 的联系电话为 123-456-7890",
+        "sql": "UPDATE Customers SET customer_contact_number = '123-456-7890' WHERE customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将供应商名称为 'ABC Electronics' 的产品的供货价格提高 10%",
+        "sql": "UPDATE Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id SET supply_price = supply_price * 1.1 WHERE Supplier.supplier_name = 'ABC Electronics'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将订单 ID 为 101 的商品中特定产品的折扣百分比从 5% 增加到 10%",
+        "sql": "UPDATE OrderItems SET discount_percentage = 0.1 WHERE order_id = 101 AND product_name = 'Laptop Model X'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Inventory",
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "当库存中某个产品的数量降至reorder_threshold时，更新该产品在所有订单中的价格为新的市场价格",
+        "sql": "UPDATE Inventory JOIN Products ON Inventory.product_id = Products.product_id SET  Products.product_price = market_price WHERE Inventory.quantity_in_stock <= Inventory.reorder_threshold;"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders",
+            "Products"
+        ],
+        "nl": "当售后服务请求的解决状态为 'resolved' 时，更新该产品的 warranty_period_in_months 为剩余期限",
+        "sql": "UPDATE AfterSalesServiceRequests JOIN Orders ON AfterSalesServiceRequests.order_id = Orders.order_id JOIN Products ON Orders.product_id = Products.product_id SET Products.warranty_period_in_months = Products.warranty_period_in_months - (DATEDIFF(CURDATE(), AfterSalesServiceRequests.resolution_date)) / 30 WHERE AfterSalesServiceRequests.resolution_status = 'resolved'"
+    }
+]

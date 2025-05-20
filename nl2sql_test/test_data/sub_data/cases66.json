@@ -1,0 +1,68 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户张三的联系电话为13800001234",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800001234' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "更新所有由供应商ABC供应的产品的供货价格为100元",
+        "sql": "UPDATE Products SET supply_price = 100 WHERE product_id IN (SELECT product_id FROM ProductSupplierMapping WHERE supplier_id = (SELECT supplier_id FROM Suppliers WHERE supplier_name = 'ABC'))"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "将所有订单商品的折扣百分比增加1%",
+        "sql": "UPDATE OrderItems SET discount_percentage = discount_percentage + 0.01 WHERE order_id IN (SELECT order_id FROM Orders)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "将所有来自供应商XYZ的产品订单的总金额减去10%，并将该金额更新到Orders表中",
+        "sql": "UPDATE Orders SET order_total_amount = (order_total_amount * 0.9) WHERE order_id IN (SELECT order_id FROM OrderItems JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id WHERE Suppliers.supplier_name = 'XYZ')"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Inventory",
+            "Products"
+        ],
+        "nl": "将所有产品库存数量大于50的产品的更新其reorder_threshold设置为100",
+        "sql": "UPDATE Inventory SET reorder_threshold = 100 WHERE product_id IN (SELECT product_id FROM Products WHERE quantity_in_stock > 50)"
+    }
+]

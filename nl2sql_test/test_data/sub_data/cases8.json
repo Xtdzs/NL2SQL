@@ -1,0 +1,72 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和邮箱地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和对应的屏幕尺寸",
+        "sql": "SELECT Products.product_name, ProductSpecifications.screen_size_in_inches FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单总金额",
+        "sql": "SELECT Customers.customer_full_name, SUM(Orders.order_total_amount) AS total_spent FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "按供应商分组，查询每个供应商的产品数量和总供应价格",
+        "sql": "SELECT Suppliers.supplier_name, COUNT(DISTINCT Products.product_id) AS product_count, SUM(ProductSupplierMapping.supply_price) AS total_supply_price FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "where",
+            "subquery"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems",
+            "Products"
+        ],
+        "nl": "查询所有订单中的产品，但排除那些产品的屏幕尺寸小于14英寸的产品",
+        "sql": "SELECT OrderItems.product_id, Products.product_name FROM OrderItems JOIN Products ON OrderItems.product_id = Products.product_id WHERE OrderItems.product_id IN (SELECT product_id FROM ProductSpecifications WHERE screen_size_in_inches >= 14)"
+    }
+]

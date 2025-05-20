@@ -1,0 +1,69 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户张三的联系方式为 13800000000",
+        "sql": "UPDATE Customers SET customer_contact_number = '13800000000' WHERE customer_full_name = '张三'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将所有CPU型号为Intel Core i7的产品的供货价格调整为1000元",
+        "sql": "UPDATE Products p JOIN ProductSupplierMapping ps ON p.product_id = ps.product_id SET p.supply_price = 1000 WHERE p.processor_model = 'Intel Core i7'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "修改所有订单中产品数量为3的订单项的价格为100元",
+        "sql": "UPDATE OrderItems oi JOIN Orders o ON oi.order_id = o.order_id SET oi.unit_price = 100 WHERE oi.quantity = 3"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "如果某个产品的库存量低于50，则将其供货价格提高10元",
+        "sql": "UPDATE Products p JOIN ProductSpecifications ps ON p.product_id = ps.product_id JOIN Inventory i ON p.product_id = i.product_id SET p.supply_price = p.supply_price + 10 WHERE i.quantity_in_stock < 50"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "AfterSalesServiceRequests",
+            "Orders",
+            "Products"
+        ],
+        "nl": "将所有售后申请状态为‘已解决’且产品型号为'笔记本电脑'的订单修改为已完成",
+        "sql": "UPDATE AfterSalesServiceRequests AS ASR JOIN Orders AS O ON ASR.order_id = O.order_id JOIN Products AS P ON O.product_id = P.product_id SET O.order_status = '已完成' WHERE ASR.resolution_status = '已解决' AND P.product_name = '笔记本电脑'"
+    }
+]

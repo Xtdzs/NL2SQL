@@ -1,0 +1,71 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和电子邮件地址",
+        "sql": "SELECT customer_full_name, customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询产品名称、供应商名称和供货价格",
+        "sql": "SELECT Products.product_name, Suppliers.supplier_name, ProductSupplierMapping.supply_price FROM Products JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "filter"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询所有订单状态为'已发货'的客户姓名和订单日期",
+        "sql": "SELECT Customers.customer_full_name, Orders.order_date FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id WHERE Orders.order_status = '已发货'"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "filter"
+        ],
+        "tables": [
+            "Products",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "查询每个产品类型下的平均销售价格，以及总销量超过100的product_name",
+        "sql": "SELECT Products.product_category, AVG(OrderItems.unit_price * OrderItems.quantity) AS average_sale_price FROM Products JOIN OrderItems ON Products.product_id = OrderItems.product_id JOIN Orders ON OrderItems.order_id = Orders.order_id GROUP BY Products.product_category HAVING SUM(OrderItems.quantity) > 100 UNION SELECT product_name, '' AS average_sale_price FROM Products WHERE product_id IN (SELECT DISTINCT product_id FROM OrderItems WHERE quantity > 100)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Orders",
+            "Inventory",
+            "ProductSupplierMapping"
+        ],
+        "nl": "查询每个订单的商品总价，以及其对应产品的供应链成本和库存数量排名",
+        "sql": "SELECT Orders.order_id, SUM(OrderItems.unit_price * OrderItems.quantity) AS order_total_value, ProductSupplierMapping.supply_price AS supply_chain_cost, (SELECT quantity_in_stock FROM Inventory WHERE product_id = Products.product_id ORDER BY quantity_in_stock DESC) AS inventory_rank FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id WINDOW w AS (ORDER BY supply_price)"
+    }
+]

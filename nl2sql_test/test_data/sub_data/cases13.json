@@ -1,0 +1,71 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的姓名和注册日期",
+        "sql": "SELECT customer_full_name, customer_registered_date FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询所有产品的名称和存储容量",
+        "sql": "SELECT Products.product_name, ProductSpecifications.storage_capacity_in_gb FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询每个客户的订单数量",
+        "sql": "SELECT Customers.customer_full_name, COUNT(Orders.order_id) AS order_count FROM Customers JOIN Orders ON Customers.customer_id = Orders.customer_id GROUP BY Customers.customer_full_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate",
+            "group by"
+        ],
+        "tables": [
+            "Orders",
+            "Products",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的销售额和产品数量",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales, COUNT(DISTINCT Products.product_id) AS product_count FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id JOIN ProductSupplierMapping ON Products.product_id = ProductSupplierMapping.product_id JOIN Suppliers ON ProductSupplierMapping.supplier_id = Suppliers.supplier_id GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "subquery"
+        ],
+        "tables": [
+            "Products",
+            "Inventory",
+            "Orders"
+        ],
+        "nl": "查询库存数量大于10的商品名称，以及该商品在订单中的销售记录",
+        "sql": "SELECT Products.product_name FROM Products JOIN Inventory ON Products.product_id = Inventory.product_id WHERE Inventory.quantity_in_stock > 10\nUNION ALL SELECT ProductSpecifications.processor_model, OrderItems.order_id FROM Inventory JOIN Products ON Inventory.product_id = Products.product_id JOIN  ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Orders ON Products.product_id = Orders.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE Inventory.quantity_in_stock > 10"
+    }
+]

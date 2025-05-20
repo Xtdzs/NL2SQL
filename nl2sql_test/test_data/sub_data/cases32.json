@@ -1,0 +1,69 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "select"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "查询所有客户的电子邮件地址",
+        "sql": "SELECT customer_email_address FROM Customers"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications"
+        ],
+        "nl": "查询产品名称和其处理器型号",
+        "sql": "SELECT Products.product_name, ProductSpecifications.processor_model FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "select",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "Customers"
+        ],
+        "nl": "查询订单号和客户姓名",
+        "sql": "SELECT Orders.order_id, Customers.customer_full_name FROM Orders JOIN Customers ON Orders.customer_id = Customers.customer_id"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Orders",
+            "ProductSupplierMapping",
+            "Suppliers"
+        ],
+        "nl": "查询每个供应商的产品总销量",
+        "sql": "SELECT Suppliers.supplier_name, SUM(OrderItems.unit_price * OrderItems.quantity) AS total_sales FROM Suppliers JOIN ProductSupplierMapping ON Suppliers.supplier_id = ProductSupplierMapping.supplier_id JOIN Products ON ProductSupplierMapping.product_id = Products.product_id JOIN Orders ON Products.product_id = Orders.product_id JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY Suppliers.supplier_name"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "select",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Inventory"
+        ],
+        "nl": "查询每个产品类别下，库存数量大于10且处理器型号为“Intel Core i7”的产品",
+        "sql": "SELECT Products.product_name, Products.product_category FROM Products JOIN ProductSpecifications ON Products.product_id = ProductSpecifications.product_id JOIN Inventory ON Products.product_id = Inventory.product_id WHERE ProductSpecifications.processor_model = 'Intel Core i7' AND Inventory.quantity_in_stock > 10 GROUP BY Products.product_name, Products.product_category"
+    }
+]

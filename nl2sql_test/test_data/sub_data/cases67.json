@@ -1,0 +1,70 @@
+[
+    {
+        "level": 1,
+        "tasks": [
+            "update"
+        ],
+        "tables": [
+            "Customers"
+        ],
+        "nl": "修改客户John Doe的联系电话为123-456-7890",
+        "sql": "UPDATE Customers SET customer_contact_number = '123-456-7890' WHERE customer_full_name = 'John Doe'"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Products",
+            "ProductSupplierMapping"
+        ],
+        "nl": "将所有供应商为ABC公司的产品价格提高10%",
+        "sql": "UPDATE Products SET product_price = (SELECT supply_price * 1.1 FROM ProductSupplierMapping WHERE ProductSupplierMapping.product_id = Products.product_id AND SupplierName = 'ABC Company')"
+    },
+    {
+        "level": 2,
+        "tasks": [
+            "update",
+            "join"
+        ],
+        "tables": [
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "如果一个订单包含笔记本电脑，则将该订单的总金额增加10%",
+        "sql": "UPDATE Orders SET order_total_amount = (SELECT SUM(unit_price * quantity) + (SELECT CASE WHEN product_category = 'Laptop' THEN 0.1 * SUM(unit_price * quantity) ELSE 0 END FROM OrderItems WHERE OrderItems.order_id = Orders.order_id) FROM OrderItems WHERE OrderItems.order_id = Orders.order_id)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "aggregate"
+        ],
+        "tables": [
+            "Products",
+            "ProductSpecifications",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "如果一个产品在过去三个月内销售数量超过10个，则将该产品的库存数量减少5%",
+        "sql": "UPDATE Products SET product_stock = (SELECT product_stock * 0.95 FROM Products WHERE Product.product_id IN (SELECT DISTINCT product_id FROM OrderItems WHERE order_date >= DATE('now', '-3 months')) AND COUNT(*) > 10) WHERE EXISTS(SELECT product_id FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id JOIN Products ON OrderItems.product_id = Products.product_id WHERE Products.product_id = Product.product_id AND order_date >= DATE('now', '-3 months') GROUP BY Products.product_id HAVING COUNT(*) > 10)"
+    },
+    {
+        "level": 3,
+        "tasks": [
+            "update",
+            "join",
+            "window"
+        ],
+        "tables": [
+            "Customers",
+            "Orders",
+            "OrderItems"
+        ],
+        "nl": "如果一个客户过去的订单总金额超过前5%的客户总订单金额，则将该客户的折扣比例提高1%",
+        "sql": "UPDATE Customers SET customer_discount = (SELECT COALESCE(SUM(order_total_amount), 0) + 1 FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id WHERE CustomerId = Customers.customer_id AND order_date < CURRENT_DATE GROUP BY CustomerId HAVING SUM(order_total_amount) > (SELECT PERCENTILE_CONT(0.05) WITHIN GROUP (ORDER BY SUM(order_total_amount)) FROM Orders JOIN OrderItems ON Orders.order_id = OrderItems.order_id GROUP BY CustomerId))"
+    }
+]
