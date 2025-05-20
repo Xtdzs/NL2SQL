@@ -1,12 +1,10 @@
 import requests
 
 url = "your_service_url"
-schema = "your_schema"
+table_list = ["your_table_list"]
+question = ""
 
 def one_shot_test(nl: str, table_list: list):
-    # configure
-    table_list = [schema + "." + table for table in table_list]
-
     query = {
         "query": nl,
         "related_table": table_list,
@@ -26,6 +24,6 @@ def one_shot_test(nl: str, table_list: list):
 
 if __name__ == "__main__":
     one_shot_test(
-        nl="",
-        table_list=["your_table_list"]
+        nl=question,
+        table_list=table_list
     )
