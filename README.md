@@ -12,7 +12,7 @@ git clone https://github.com/Xtdzs/NL2SQL.git
 
 ### 2 Install dependencies
 
-First you have to download `Ollama` which we will use later to run our models.
+Please download `Ollama` which we will use later to run our models.
 
 **Linux**
 
